@@ -40,7 +40,6 @@ const GlobalStyles = createGlobalStyle`
     background: #f0f7f0;
     width: 100%;
     height: 100%;
-    overflow-y: scroll;
   }
 
 ::-webkit-scrollbar {

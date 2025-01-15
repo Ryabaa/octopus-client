@@ -9,7 +9,7 @@ import { PiPokerChip } from "react-icons/pi";
 import { AiFillHome } from "react-icons/ai";
 import { CiGrid41 } from "react-icons/ci";
 
-const Navbar: FC = () => {
+const AppNavbar: FC = () => {
     return (
         <NavbarWrapper>
             <CartIcon>
@@ -36,4 +36,4 @@ const Navbar: FC = () => {
     );
 };
 
-export default Navbar;
+export default AppNavbar;

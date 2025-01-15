@@ -4,7 +4,7 @@ export const NavbarWrapper = styled.nav`
     position: fixed;
     bottom: 0;
     left: 0;
-    background-color: #000000b0;
+    background-color: #000;
     width: 100%;
     height: 70px;
     z-index: 10;
@@ -54,11 +54,11 @@ export const CartIcon = styled.div`
 export const CartBorder = styled.div`
     position: absolute;
     left: 50%;
-    top: 0;
+    top: -1px;
     transform: translate(-50%, 0);
-    height: 32px;
-    width: 72px;
+    height: 35px;
+    width: 74px;
     border-radius: 0 0 45px 45px;
-    background: #dce4db;
-    z-index: 15px;
+    background: #f0f7f0;
+    z-index: 15;
 `;

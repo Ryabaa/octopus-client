@@ -11,7 +11,8 @@ import AuthHandler from "@components/auth/authHandler";
 import Auth from "@components/auth/Auth";
 import Login from "@components/auth/Login";
 import Register from "@components/auth/Register";
-import Navbar from "@components/navbar/Navbar";
+import AppNavbar from "@components/app-navbar/AppNavbar";
+import CatalogNavbar from "@components/catalog-navbar/CatalogNavbar";
 
 const App: FC = () => {
     return (
@@ -31,10 +32,11 @@ const App: FC = () => {
                 theme="light"
             />
             <BrowserRouter>
-                <Navbar />
+                <CatalogNavbar />
+                <AppNavbar />
                 <Routes>
-                    {/* <Route path="*" element={<Navigate to="/catalog" replace />} /> */}
-
+                    {/* <Route path="*" element={<Navigate to="/catalog" replace />} />
+                     */}
                     <Route path="/auth/*" element={<Auth />}>
                         <Route path="login" element={<Login />} />
                         <Route path="register" element={<Register />} />
