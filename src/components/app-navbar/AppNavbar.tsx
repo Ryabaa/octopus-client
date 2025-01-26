@@ -4,17 +4,16 @@ import { NavLink } from "react-router-dom";
 import { NavbarWrapper, CartIcon, CartBorder, Container } from "./styles";
 
 import { MdOutlineShoppingCart } from "react-icons/md";
-import { FaUser } from "react-icons/fa";
+import { FaRegHeart, FaUser } from "react-icons/fa";
 import { PiPokerChip } from "react-icons/pi";
 import { AiFillHome } from "react-icons/ai";
-import { CiGrid41 } from "react-icons/ci";
 
 const AppNavbar: FC = () => {
     return (
         <NavbarWrapper>
             <CartIcon>
                 <NavLink to="/cart">
-                    <MdOutlineShoppingCart size={18} />
+                    <MdOutlineShoppingCart size={20} />
                 </NavLink>
             </CartIcon>
             <CartBorder />
@@ -22,12 +21,14 @@ const AppNavbar: FC = () => {
                 <NavLink to="/catalog" className={({ isActive }) => (isActive ? "active" : "")}>
                     <AiFillHome size={20} />
                 </NavLink>
-                <NavLink to="/roulette" className={({ isActive }) => (isActive ? "active" : "")}>
-                    <PiPokerChip size={21} />
+                <NavLink to="/favorites" className={({ isActive }) => (isActive ? "active" : "")}>
+                    <FaRegHeart size={20} />
                 </NavLink>
             </Container>
             <Container>
-                <CiGrid41 size={22} />
+                <NavLink to="/roulette" className={({ isActive }) => (isActive ? "active" : "")}>
+                    <PiPokerChip size={23} />
+                </NavLink>
                 <NavLink to="/profile" className={({ isActive }) => (isActive ? "active" : "")}>
                     <FaUser size={20} />
                 </NavLink>

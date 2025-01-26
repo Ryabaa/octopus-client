@@ -1,15 +1,21 @@
 import styled from "styled-components";
 
 export const AuthWrapper = styled.div`
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    min-height: 100%;
+    padding-top: 50px;
+    background-color: #e3e3e3;
+`;
+
+export const AuthContainer = styled.div`
     width: 320px;
-    padding: 20px 0;
-    height: 780px;
     row-gap: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    margin-top: 50px;
 `;
 
 export const Tabs = styled.div`
@@ -27,7 +33,7 @@ export const Tab = styled.div.attrs<TabProps>({})`
     padding: 10px;
     font-weight: 400;
     text-align: center;
-    background: ${({ $isActive }) => ($isActive ? "#fff" : "#00000027")};
+    background: ${({ $isActive }) => ($isActive ? "#fff" : "#00000052")};
     color: ${({ $isActive }) => ($isActive ? "unset" : "#fff")};
     border-radius: 0 15px 15px 0;
     &:first-child {
@@ -35,16 +41,19 @@ export const Tab = styled.div.attrs<TabProps>({})`
     }
 `;
 
-export const Logo = styled.img`
-    width: 120px;
-    filter: invert(1);
+export const Logo = styled.div`
+    svg {
+        width: 80px;
+        height: 80px;
+        margin: 30px 0;
+    }
 `;
 
 export const Form = styled.form`
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     height: 100%;
-    justify-content: center;
     text-align: center;
     width: 85%;
 `;
@@ -74,7 +83,7 @@ export const Input = styled.input`
     width: 100%;
     border-radius: 30px;
     text-align: center;
-    background-color: #00000027;
+    background-color: #00000052;
     color: #ffffff;
     &::placeholder {
         color: #ffffff;
@@ -94,7 +103,7 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 50px;
+    margin-bottom: 50px;
     height: 200px;
     row-gap: 10px;
     p {
@@ -103,7 +112,8 @@ export const Container = styled.div`
     a {
         height: 50px;
         width: 100%;
-        background-color: #00000027;
+        background-color: #00000052;
+        color: #fff;
         border-radius: 30px;
         display: flex;
         flex-direction: row;

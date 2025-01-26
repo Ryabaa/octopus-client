@@ -1,38 +1,60 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, FocusEvent, MouseEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { debounce } from "lodash";
 
-import { MenuButton, MenuContainer, NavbarWrapper, NavLogo, Search } from "./styles";
+import {
+    IndicatorContainer,
+    IndicatorDot,
+    MenuButton,
+    MenuContainer,
+    MenuToggler,
+    NavbarWrapper,
+    NavLogo,
+    Search,
+} from "./styles";
 
-import logo from "@assets/Logo.png";
-import vapeIcon from "@assets/vape.png";
-import atomizerIcon from "@assets/atomizer.png";
-import liquidIcon from "@assets/liquid.png";
-import disposableIcon from "@assets/disposable.png";
 import soundFile from "@assets/sound.mp3";
+
+import LogoIcon from "@assets/logo2.svg?react";
+import AllAssortimentIcon from "@assets/all-assort.svg?react";
+import AccessoriesIcon from "@assets/accessories.svg?react";
+import LiquidIcon from "@assets/liquid.svg?react";
+import VapeIcon from "@assets/vape.svg?react";
+import DisposableIcon from "@assets/disposable.svg?react";
+import SnusIcon from "@assets/snus.svg?react";
+
+import { CiSearch } from "react-icons/ci";
 
 import { MenuItem } from "./types";
 
-import { PiCardsLight } from "react-icons/pi";
-import { CiSearch } from "react-icons/ci";
+import { useAppDispatch, useAppSelector } from "@hooks/reduxHooks";
+import { RootState } from "@app/store";
+
+import { setCategory, setSearchQuery } from "@components/catalog/slice";
+import { BsFillGrid1X2Fill } from "react-icons/bs";
+import { IoIosArrowBack } from "react-icons/io";
 
 const menuItems: MenuItem[] = [
-    { id: 1, icon: <PiCardsLight size={23} />, label: "Все товары", url: "all" },
-    { id: 2, icon: <img src={liquidIcon} />, label: "Жидкости", url: "liquids" },
-    { id: 3, icon: <img src={vapeIcon} />, label: "Вейпы", url: "vapes" },
-    { id: 4, icon: <img src={atomizerIcon} />, label: "Расходники", url: "accessories" },
-    { id: 5, icon: <img src={disposableIcon} />, label: "Одноразки", url: "disposable" },
+    { id: 1, icon: <AllAssortimentIcon />, label: "все товары", category: "all" },
+    { id: 2, icon: <LiquidIcon />, label: "жидкости", category: "liquids" },
+    { id: 3, icon: <VapeIcon />, label: "вейпы", category: "vapes" },
+    { id: 4, icon: <AccessoriesIcon />, label: "расходники", category: "accessories" },
+    { id: 5, icon: <DisposableIcon />, label: "одноразки", category: "disposable" },
+    { id: 6, icon: <SnusIcon />, label: "снюсы", category: "snus" },
 ];
 
 const CatalogNavbar: FC = () => {
     const audio = new Audio(soundFile);
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const { category, isItemDetailedOpen } = useAppSelector((state: RootState) => state.catalog);
 
     const [clickCount, setClickCount] = useState<number>(0);
     const [timer, setTimer] = useState<number | null>(null);
     const [isAnimating, setIsAnimating] = useState(false);
     const [activeItem, setActiveItem] = useState<number>(1);
-    const [isInputOpen, setIsInputOpen] = useState<boolean>(false);
-    const [searchQuery, setSearchQuery] = useState<string>("");
+    const [isExpanded, setIsExpanded] = useState(false);
 
     useEffect(() => {
         if (clickCount === 10) {
@@ -40,7 +62,7 @@ const CatalogNavbar: FC = () => {
         }
     }, [clickCount]);
 
-    const handleClick = (event: React.MouseEvent) => {
+    const handleClick = (event: MouseEvent) => {
         event.stopPropagation();
         setIsAnimating(false);
         if (timer) {
@@ -60,41 +82,66 @@ const CatalogNavbar: FC = () => {
         }, 0);
     };
 
-    const handleInputOpen = () => {
-        setIsInputOpen(!isInputOpen);
-    };
-
-    const handleSetQuery = (event: ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(event.target.value);
-    };
+    const handleSearch = debounce((event: ChangeEvent<HTMLInputElement>) => {
+        dispatch(setSearchQuery(event.target.value));
+    }, 300);
 
     const handleSelectItem = (itemId: number, itemUrl: string) => {
         setActiveItem(itemId);
+        setIsExpanded(false);
+        dispatch(setCategory(itemUrl));
         setTimeout(() => {
             navigate(`/catalog/${itemUrl}`);
-        }, 300);
+        }, 200);
+    };
+
+    useEffect(() => {
+        const selectedItem = menuItems.find((item) => item.category === category);
+        setActiveItem(selectedItem!.id);
+    }, [category]);
+
+    const handleToggle = () => setIsExpanded((prev) => !prev);
+
+    const handleBlur = (event: FocusEvent<HTMLDivElement>) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+            setIsExpanded(false);
+        }
     };
 
     return (
-        <NavbarWrapper>
-            <NavLogo isAnimating={isAnimating} onClick={handleClick} src={logo} alt="Logo" />
-            <MenuContainer>
+        <NavbarWrapper tabIndex={0} onBlur={handleBlur} ref={containerRef}>
+            <MenuToggler isVisible={!isExpanded} onClick={handleToggle}>
+                <BsFillGrid1X2Fill size={23} />
+            </MenuToggler>
+            <MenuContainer isExpanded={isExpanded}>
                 {menuItems.map((item) => (
                     <MenuButton
                         key={item.id}
                         isActive={item.id === activeItem}
-                        onClick={() => handleSelectItem(item.id, item.url)}>
+                        onClick={() => handleSelectItem(item.id, item.category)}>
                         <span className="icon">{item.icon}</span>
-                        {item.id === activeItem && <span className="label">{item.label}</span>}
                     </MenuButton>
                 ))}
+                <MenuButton isActive={true} onClick={handleToggle}>
+                    <IoIosArrowBack size={20} />
+                </MenuButton>
             </MenuContainer>
-            <Search isOpen={isInputOpen}>
-                <button onClick={handleInputOpen}>
+            {!isItemDetailedOpen && (
+                <Search isVisible={!isExpanded}>
                     <CiSearch size={23} />
-                </button>
-                <input type="text" placeholder="Поиск товара" onChange={handleSetQuery} />
-            </Search>
+                    <input type="text" placeholder="поиск: жидкости" onChange={handleSearch} />
+                </Search>
+            )}
+            <NavLogo isVisible={!isExpanded} isAnimating={isAnimating} onClick={handleClick}>
+                <LogoIcon />
+            </NavLogo>
+            {!isItemDetailedOpen && (
+                <IndicatorContainer>
+                    {menuItems.map((item) => (
+                        <IndicatorDot key={item.id} isActive={item.id === activeItem} />
+                    ))}
+                </IndicatorContainer>
+            )}
         </NavbarWrapper>
     );
 };

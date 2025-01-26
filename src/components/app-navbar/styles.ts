@@ -2,13 +2,15 @@ import styled from "styled-components";
 
 export const NavbarWrapper = styled.nav`
     position: fixed;
-    bottom: 0;
-    left: 0;
-    background-color: #000;
-    width: 100%;
+    bottom: 10px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    background-color: #787878;
+    width: 96%;
     height: 70px;
     z-index: 10;
     color: #fff;
+    border-radius: 20px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     column-gap: 100px;
@@ -18,7 +20,7 @@ export const NavbarWrapper = styled.nav`
     a {
         color: #fff;
         &.active {
-            color: #dcff32;
+            color: #00aa6b;
         }
     }
 `;
@@ -33,8 +35,8 @@ export const CartIcon = styled.div`
     width: 64px;
     height: 55px;
     border-radius: 45px;
-    background-color: #dcff32;
-    box-shadow: 0 0 8px #dcff32;
+    background-color: #00aa6b;
+    //box-shadow: 0 0 4px #00aa6b;
     left: 50%;
     top: 0;
     transform: translate(-50%, -50%);
@@ -43,11 +45,8 @@ export const CartIcon = styled.div`
     align-items: center;
     z-index: 20;
     a {
-        color: #4e4e4e;
+        color: #fff;
         display: flex;
-        &.active {
-            color: #4e4e4e;
-        }
     }
 `;
 

@@ -37,20 +37,20 @@ const GlobalStyles = createGlobalStyle`
     display: flex;
     justify-content: center;
     background-size: cover;
-    background: #f0f7f0;
-    width: 100%;
+    background: #fafafa;
     height: 100%;
+    width: 100%;
+    overflow: hidden;
   }
 
-::-webkit-scrollbar {
-    width: 10px;
+  ::-webkit-scrollbar {
+    width: 7px;
     height: 8px;
     background: unset;
-
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #545454;
+    background-color: #c5c5c5;
     border-radius: 10px;
     transition: all 0.3s ease;
     &:hover {
@@ -61,7 +61,6 @@ const GlobalStyles = createGlobalStyle`
 ::-webkit-scrollbar-button {
     display: none;
 }
-
 `;
 
 export default GlobalStyles;
