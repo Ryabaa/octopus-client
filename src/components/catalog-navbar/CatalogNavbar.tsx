@@ -48,7 +48,7 @@ const CatalogNavbar: FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const { category, isItemDetailedOpen } = useAppSelector((state: RootState) => state.catalog);
+    const { category, isCurrentProductOpen } = useAppSelector((state: RootState) => state.catalog);
 
     const [clickCount, setClickCount] = useState<number>(0);
     const [timer, setTimer] = useState<number | null>(null);
@@ -126,7 +126,7 @@ const CatalogNavbar: FC = () => {
                     <IoIosArrowBack size={20} />
                 </MenuButton>
             </MenuContainer>
-            {!isItemDetailedOpen && (
+            {!isCurrentProductOpen && (
                 <Search isVisible={!isExpanded}>
                     <CiSearch size={23} />
                     <input type="text" placeholder="поиск: жидкости" onChange={handleSearch} />
@@ -135,7 +135,7 @@ const CatalogNavbar: FC = () => {
             <NavLogo isVisible={!isExpanded} isAnimating={isAnimating} onClick={handleClick}>
                 <LogoIcon />
             </NavLogo>
-            {!isItemDetailedOpen && (
+            {!isCurrentProductOpen && (
                 <IndicatorContainer>
                     {menuItems.map((item) => (
                         <IndicatorDot key={item.id} isActive={item.id === activeItem} />

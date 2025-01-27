@@ -91,7 +91,7 @@ const Catalog: FC = () => {
                                         <h3>{product.name}</h3>
                                         <ItemInfo>
                                             <h2>
-                                                Вкусов в наличии: <span>15</span>
+                                                Видов в наличии: <span>15</span>
                                             </h2>
                                             <p>
                                                 От <span>7.6</span> до <span>9.4 BYN</span>

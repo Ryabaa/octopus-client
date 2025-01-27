@@ -10,11 +10,11 @@ const sampleProducts = [
         amount: 17,
         name: "XYLINET Tebe Pizda 50мг",
         category: "liquids",
-        cards: [
-            { id: 1, name: "Клубничный минет", amount: 69, count: 0 },
-            { id: 2, name: "Клубничный денис", amount: 69, count: 0 },
-            { id: 3, name: "Денисова клубника", amount: 69, count: 0 },
-            { id: 4, name: "Денисов минет", amount: 69, count: 0 },
+        items: [
+            { id: 1, name: "Клубничный минет", amount: 69 },
+            { id: 2, name: "Клубничный денис", amount: 69 },
+            { id: 3, name: "Денисова клубника", amount: 69 },
+            { id: 4, name: "Денисов минет", amount: 69 },
         ],
     },
 ];
@@ -25,8 +25,8 @@ const authInitialState: any = {
     favorites: [],
     category: "all",
     searchQuery: "",
-    itemDetailed: null,
-    isItemDetailedOpen: false,
+    currentProduct: null,
+    isCurrentProductOpen: false,
 };
 
 export const catalogSlice = createSlice({
@@ -49,20 +49,20 @@ export const catalogSlice = createSlice({
         setSearchQuery: (state, action: PayloadAction<string>) => {
             state.searchQuery = action.payload;
         },
-        getItemDetailed: (state, action: PayloadAction<number>) => {
-            const itemDetailed = state.products.find((product: any) => product.id === action.payload);
+        getCurrentProduct: (state, action: PayloadAction<number>) => {
+            const currentProduct = state.products.find((product: any) => product.id === action.payload);
 
-            state.isItemDetailedOpen = true;
-            state.itemDetailed = itemDetailed;
+            state.isCurrentProductOpen = true;
+            state.currentProduct = currentProduct;
         },
-        closeItemDetailed: (state) => {
-            state.isItemDetailedOpen = false;
-            state.itemDetailed = null;
+        closeCurrentProduct: (state) => {
+            state.isCurrentProductOpen = false;
+            state.currentProduct = null;
         },
     },
 });
 
-export const { filterProducts, setCategory, setSearchQuery, getItemDetailed, closeItemDetailed } =
+export const { filterProducts, setCategory, setSearchQuery, getCurrentProduct, closeCurrentProduct } =
     catalogSlice.actions;
 
 export default catalogSlice.reducer;

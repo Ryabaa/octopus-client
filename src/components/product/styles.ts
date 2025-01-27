@@ -161,9 +161,14 @@ export const ItemCounter = styled.div`
     svg {
         color: #fff;
     }
-    p {
+    input {
+        width: 35px;
+        height: 35px;
+        text-align: center;
+        z-index: 3;
         position: absolute;
         left: 50%;
+        background: unset;
         color: #fff;
         transform: translate(-50%, 0);
         font-size: 15px;
@@ -180,14 +185,22 @@ export const ActionMenu = styled.div`
     border-radius: 15px;
     width: 85%;
     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.11);
+    margin-bottom: 30px;
     button {
         width: 100%;
         font-size: 15px;
         background: unset;
         height: 50px;
         color: #787878;
+        border-radius: 0 15px 15px 0;
         &:first-child {
+            border-radius: 15px 0 0 15px;
             border-right: 1px solid #e3e3e3;
+        }
+        &:active {
+            background: #a0a0a057;
         }
     }
 `;
+
+export const ActionMenuCounter = styled.div``;

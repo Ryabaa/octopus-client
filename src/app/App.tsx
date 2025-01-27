@@ -14,7 +14,7 @@ import Register from "@components/auth/Register";
 import AppNavbar from "@components/app-navbar/AppNavbar";
 import CatalogNavbar from "@components/catalog-navbar/CatalogNavbar";
 import Catalog from "@components/catalog/Catalog";
-import ItemDetailed from "@components/item-detailed/ItemDetailed";
+import Product from "@components/product/Product";
 
 const App: FC = () => {
     return (
@@ -38,7 +38,7 @@ const App: FC = () => {
                 <AppNavbar />
                 <Routes>
                     <Route path="/catalog/:category" element={<Catalog />} />
-                    <Route path="/catalog/item/:id" element={<ItemDetailed />} />
+                    <Route path="/catalog/item/:id" element={<Product />} />
 
                     <Route path="/auth/*" element={<Auth />}>
                         <Route path="login" element={<Login />} />

@@ -46,6 +46,11 @@ export const ItemHead = styled.div`
 `;
 
 export const ItemInfo = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    row-gap: 5px;
     h2 {
         color: #787878;
     }
@@ -57,7 +62,7 @@ export const ItemInfo = styled.div`
 
 export const ProductItem = styled.div`
     width: 160px;
-    height: 230px;
+    height: 240px;
     padding-top: 25px;
     padding-bottom: 10px;
     border-radius: 15px;
