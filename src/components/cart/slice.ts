@@ -1,15 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface CartItem {
-    productId: string;
-    itemId: string;
-    count: number;
-}
-
-interface CartState {
-    items: CartItem[];
-    totalAmount: number;
-}
+import { CartState } from "./types";
+import { calculateMix } from "@utils/calculateMix";
 
 const initialState: CartState = {
     items: [],
@@ -20,38 +11,7 @@ const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
-        addItem(state, action: PayloadAction<{ productId: string; itemId: string }>) {
-            const { productId, itemId } = action.payload;
-
-            const existingItem = state.items.find(
-                (item) => item.productId === productId && item.itemId === itemId
-            );
-
-            if (existingItem) {
-                existingItem.count += 1;
-            } else {
-                state.items.push({ productId, itemId, count: 1 });
-            }
-        },
-
-        removeItem(state, action: PayloadAction<{ productId: string; itemId: string }>) {
-            const { productId, itemId } = action.payload;
-
-            const existingItem = state.items.find(
-                (item) => item.productId === productId && item.itemId === itemId
-            );
-
-            if (existingItem) {
-                if (existingItem.count > 1) {
-                    existingItem.count -= 1;
-                } else {
-                    state.items = state.items.filter(
-                        (item) => item.productId !== productId || item.itemId !== itemId
-                    );
-                }
-            }
-        },
-        setManualCount(state, action: PayloadAction<{ productId: string; itemId: string; count: number }>) {
+        updateItemCount(state, action: PayloadAction<{ productId: string; itemId: string; count: number }>) {
             const { productId, itemId, count } = action.payload;
 
             const existingItem = state.items.find(
@@ -59,7 +19,7 @@ const cartSlice = createSlice({
             );
 
             if (existingItem) {
-                if (count > 0) {
+                if (count !== 0) {
                     existingItem.count = count;
                 } else {
                     state.items = state.items.filter(
@@ -69,6 +29,34 @@ const cartSlice = createSlice({
             } else if (count > 0) {
                 state.items.push({ productId, itemId, count });
             }
+        },
+
+        updateMixCount(
+            state,
+            action: PayloadAction<{ productId: string; items: any; desiredTotal: number }>
+        ) {
+            const { productId, items, desiredTotal } = action.payload;
+            const mix = calculateMix(items, desiredTotal);
+
+            mix.forEach((mixItem) => {
+                const existingItem = state.items.find(
+                    (item) => item.productId === productId && item.itemId === mixItem.id
+                );
+
+                if (existingItem) {
+                    existingItem.count = mixItem.count;
+                } else {
+                    state.items.push({
+                        productId,
+                        itemId: mixItem.id,
+                        count: mixItem.count,
+                    });
+                }
+            });
+
+            state.items = state.items.filter(
+                (item) => item.productId !== productId || mix.some((mixItem) => mixItem.id === item.itemId)
+            );
         },
 
         resetProductItems(state, action: PayloadAction<{ productId: string }>) {
@@ -82,5 +70,5 @@ const cartSlice = createSlice({
     },
 });
 
-export const { addItem, removeItem, setManualCount, resetProductItems, clearCart } = cartSlice.actions;
+export const { updateItemCount, resetProductItems, updateMixCount, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;

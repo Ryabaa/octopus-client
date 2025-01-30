@@ -56,10 +56,20 @@ export const ItemInfoContainer = styled.div`
         font-size: 15px;
         font-weight: 700;
     }
+    h3 {
+        color: #787878;
+        font-weight: 500;
+        font-size: 14px;
+        width: 120px;
+        span {
+            font-size: 14px;
+            color: #00aa6b;
+        }
+    }
 `;
 
-export const Line = styled.div<{ width: number; color: string }>`
-    width: ${({ width }) => `${width}px`};
+export const Line = styled.div<{ width: string; color: string }>`
+    width: ${({ width }) => width};
     background-color: ${({ color }) => color};
     height: 3px;
     border-radius: 20px;
@@ -88,32 +98,40 @@ export const ItemCatalogWrapper = styled.div`
     padding-top: 20px;
 `;
 
-export const ItemCatalog = styled.div`
+export const ItemCatalog = styled.div<{ isOutOfStock: boolean }>`
     justify-items: center;
     display: grid;
-    padding: 25px 20px 200px;
+    padding: ${({ isOutOfStock }) => (isOutOfStock ? "50px 20px 200px" : "25px 20px 50px")};
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     row-gap: 20px;
     column-gap: 5px;
     width: 100%;
 `;
 
-export const ItemCard = styled.div`
+export const StyledItemCard = styled.div<{ isOutOfStock: boolean }>`
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-direction: column;
     width: 150px;
-    height: 100px;
+    height: 110px;
     background-color: #fff;
     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.11);
     border-radius: 15px;
     color: #787878;
     position: relative;
+    opacity: ${({ isOutOfStock }) => (isOutOfStock ? 0.5 : 1)};
     h3 {
         margin-top: 10px;
         font-size: 15px;
+        height: 35px;
         font-weight: 400;
+        line-height: 1;
+        width: 100%;
+        text-align: center;
+    }
+    span {
+        color: #00aa6b;
     }
 `;
 
@@ -172,20 +190,28 @@ export const ItemCounter = styled.div`
         color: #fff;
         transform: translate(-50%, 0);
         font-size: 15px;
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
     }
 `;
 
-export const ActionMenu = styled.div`
+export const ActionMenu = styled.div<{ isActive: boolean }>`
     display: grid;
     margin-top: 15px;
+    position: relative;
     grid-template-columns: repeat(2, 1fr);
     align-items: center;
     justify-items: center;
     background: #fff;
-    border-radius: 15px;
+    transition: all 0.6s ease;
+    border-radius: ${({ isActive }) => (isActive ? "15px 15px 15px 0" : "15px")};
     width: 85%;
     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.11);
     margin-bottom: 30px;
+    z-index: 2;
     button {
         width: 100%;
         font-size: 15px;
@@ -203,4 +229,21 @@ export const ActionMenu = styled.div`
     }
 `;
 
-export const ActionMenuCounter = styled.div``;
+export const ActionMenuCounter = styled.div<{ isActive: boolean }>`
+    position: absolute;
+    width: 50%;
+    left: 0;
+    bottom: 0;
+    z-index: 1;
+    border-radius: 0 0 15px 15px;
+    transform: translate(0, 100%);
+    visibility: ${({ isActive }) => (isActive ? "visible" : "hidden")};
+    button {
+        border: 0 !important;
+        height: 35px;
+    }
+    div {
+        transition: all 0.2s ease;
+        height: ${({ isActive }) => (isActive ? "35px" : "0")} !important;
+    }
+`;
