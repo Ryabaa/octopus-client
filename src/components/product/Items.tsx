@@ -28,7 +28,7 @@ const Items: FC<ItemsProps> = ({ localValues, setLocalValues }) => {
         <>
             <ItemCatalog isOutOfStock={false}>
                 {inStockItems.map((item: any) => {
-                    const cartItem = itemsWithDetails.find((cartItem) => cartItem.id === item.id);
+                    const cartItem = itemsWithDetails.find((cartItem: any) => cartItem.id === item.id);
                     return (
                         <ItemCard
                             key={item.id}

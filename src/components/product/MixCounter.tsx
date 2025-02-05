@@ -87,7 +87,7 @@ const MixCounter: FC<MixCounterProps> = ({
         }
     };
 
-    const handleFocus = () => {
+    const handleInputFocus = () => {
         setMixCount("");
     };
 
@@ -102,7 +102,7 @@ const MixCounter: FC<MixCounterProps> = ({
                     min="0"
                     max={totalAmount}
                     value={mixCount}
-                    onFocus={handleFocus}
+                    onFocus={handleInputFocus}
                     onBlur={handleInputBlur}
                     onChange={handleInputChange}
                 />

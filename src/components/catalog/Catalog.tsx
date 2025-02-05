@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, MouseEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TransitionGroup } from "react-transition-group";
 import { useSwipeable } from "react-swipeable";
@@ -20,6 +20,7 @@ import { useAppDispatch, useAppSelector } from "@hooks/reduxHooks";
 import { RootState } from "@app/store";
 
 import { FaRegHeart } from "react-icons/fa6";
+import { Loader } from "@components/loader/Loader";
 
 const categories = ["all", "liquids", "vapes", "accessories", "disposable", "snus"];
 
@@ -73,17 +74,23 @@ const Catalog: FC = () => {
         trackMouse: true,
     });
 
+    const handleNavigate = (event: MouseEvent<HTMLDivElement>) => {
+        const productId = event.currentTarget.dataset.productId;
+        navigate(`/catalog/item/${productId}`);
+    };
+
     return (
         <CatalogContainer {...handlers}>
             <TransitionGroup>
                 {!isAnimating && (
                     <FadeTransition key={category} timeout={300} direction={swipeDirection} classNames="fade">
                         <ProductList>
-                            {isFiltered &&
+                            {isFiltered ? (
                                 filteredProducts.map((product: any) => (
                                     <ProductItem
                                         key={product.id}
-                                        onClick={() => navigate(`/catalog/item/${product.id}`)}>
+                                        data-product-id={product.id}
+                                        onClick={handleNavigate}>
                                         <ItemHead>
                                             <img src={product.image} alt="" />
                                             <FaRegHeart size={19} />
@@ -91,7 +98,7 @@ const Catalog: FC = () => {
                                         <h3>{product.name}</h3>
                                         <ItemInfo>
                                             <h2>
-                                                Видов в наличии: <span>15</span>
+                                                Видов в наличии: <span>{product.items?.length || 0}</span>
                                             </h2>
                                             <p>
                                                 От <span>7.6</span> до <span>9.4 BYN</span>
@@ -99,7 +106,16 @@ const Catalog: FC = () => {
                                         </ItemInfo>
                                         <Line />
                                     </ProductItem>
-                                ))}
+                                ))
+                            ) : (
+                                <Loader
+                                    size={80}
+                                    position="absolute"
+                                    top="50%"
+                                    left="50%"
+                                    transform="translate(-50%, -50%)"
+                                />
+                            )}
                         </ProductList>
                     </FadeTransition>
                 )}

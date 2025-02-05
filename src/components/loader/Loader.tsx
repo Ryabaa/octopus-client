@@ -18,6 +18,6 @@ export const Loader: FC<LoaderProps & { position?: Position }> = ({
     transform,
 }) => (
     <div style={{ position, top, left, transform }}>
-        <ThreeDots color="#4e4e4e" height={size} width={size} ariaLabel="loading" />
+        <ThreeDots color="#787878" height={size} width={size} ariaLabel="loading" />
     </div>
 );

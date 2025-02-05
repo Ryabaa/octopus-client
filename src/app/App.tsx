@@ -15,30 +15,22 @@ import AppNavbar from "@components/app-navbar/AppNavbar";
 import CatalogNavbar from "@components/catalog-navbar/CatalogNavbar";
 import Catalog from "@components/catalog/Catalog";
 import Product from "@components/product/Product";
+import Cart from "@components/cart/Cart";
+
+import toastConfig from "@utils/toastConfig";
 
 const App: FC = () => {
     return (
         <Provider store={store}>
             <GlobalStyles />
-            <ToastContainer
-                style={{ lineHeight: "1.5" }}
-                position="top-right"
-                autoClose={3000}
-                hideProgressBar={true}
-                newestOnTop={true}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss={false}
-                draggable
-                pauseOnHover={false}
-                theme="light"
-            />
+            <ToastContainer style={{ lineHeight: "1.5" }} {...toastConfig} />
             <BrowserRouter>
                 <CatalogNavbar />
                 <AppNavbar />
                 <Routes>
                     <Route path="/catalog/:category" element={<Catalog />} />
                     <Route path="/catalog/item/:id" element={<Product />} />
+                    <Route path="/cart" element={<Cart />} />
 
                     <Route path="/auth/*" element={<Auth />}>
                         <Route path="login" element={<Login />} />

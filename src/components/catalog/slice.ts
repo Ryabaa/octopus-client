@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import kick from "@assets/YSueH.jpg";
-import { calculateMix } from "@utils/calculateMix";
 
 const sampleProducts = [
     { id: 1, image: kick, amount: 17, name: "Aegis Boost 2", category: "vapes" },
@@ -61,11 +60,9 @@ export const catalogSlice = createSlice({
             if (currentProduct && currentProduct.items) {
                 currentProduct.items.sort((a: any, b: any) => b.amount - a.amount);
             }
-            state.isCurrentProductOpen = true;
             state.currentProduct = currentProduct;
         },
         closeCurrentProduct: (state) => {
-            state.isCurrentProductOpen = false;
             state.currentProduct = null;
         },
     },

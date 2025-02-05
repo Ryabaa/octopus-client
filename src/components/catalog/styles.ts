@@ -8,7 +8,7 @@ export const CatalogContainer = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-    margin-top: 60px;
+    padding-top: 60px;
 `;
 
 export const ProductList = styled.div`
@@ -25,7 +25,6 @@ export const Line = styled.h4`
     height: 3px;
     border-radius: 20px;
     padding: 0;
-    margin-top: 15px;
 `;
 
 export const ItemHead = styled.div`
@@ -51,6 +50,7 @@ export const ItemInfo = styled.div`
     align-items: center;
     justify-content: center;
     row-gap: 5px;
+    margin-bottom: 15px;
     h2 {
         color: #787878;
     }
@@ -75,6 +75,7 @@ export const ProductItem = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    position: relative;
     h3 {
         font-weight: 600;
         color: #787878;

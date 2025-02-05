@@ -48,13 +48,14 @@ const CatalogNavbar: FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const { category, isCurrentProductOpen } = useAppSelector((state: RootState) => state.catalog);
+    const isNavbarExpanded = useAppSelector((state: RootState) => state.catalogNavbar.isExpanded);
+    const { category } = useAppSelector((state: RootState) => state.catalog);
 
     const [clickCount, setClickCount] = useState<number>(0);
     const [timer, setTimer] = useState<number | null>(null);
     const [isAnimating, setIsAnimating] = useState(false);
     const [activeItem, setActiveItem] = useState<number>(1);
-    const [isExpanded, setIsExpanded] = useState(false);
+    const [isMenuExpanded, setIsMenuExpanded] = useState(false);
 
     useEffect(() => {
         if (clickCount === 10) {
@@ -88,7 +89,7 @@ const CatalogNavbar: FC = () => {
 
     const handleSelectItem = (itemId: number, itemUrl: string) => {
         setActiveItem(itemId);
-        setIsExpanded(false);
+        setIsMenuExpanded(false);
         dispatch(setCategory(itemUrl));
         setTimeout(() => {
             navigate(`/catalog/${itemUrl}`);
@@ -100,20 +101,20 @@ const CatalogNavbar: FC = () => {
         setActiveItem(selectedItem!.id);
     }, [category]);
 
-    const handleToggle = () => setIsExpanded((prev) => !prev);
+    const handleToggle = () => setIsMenuExpanded((prev) => !prev);
 
     const handleBlur = (event: FocusEvent<HTMLDivElement>) => {
         if (!event.currentTarget.contains(event.relatedTarget)) {
-            setIsExpanded(false);
+            setIsMenuExpanded(false);
         }
     };
 
     return (
         <NavbarWrapper tabIndex={0} onBlur={handleBlur} ref={containerRef}>
-            <MenuToggler isVisible={!isExpanded} onClick={handleToggle}>
+            <MenuToggler isVisible={!isMenuExpanded} onClick={handleToggle}>
                 <BsFillGrid1X2Fill size={23} />
             </MenuToggler>
-            <MenuContainer isExpanded={isExpanded}>
+            <MenuContainer isExpanded={isMenuExpanded}>
                 {menuItems.map((item) => (
                     <MenuButton
                         key={item.id}
@@ -126,16 +127,16 @@ const CatalogNavbar: FC = () => {
                     <IoIosArrowBack size={20} />
                 </MenuButton>
             </MenuContainer>
-            {!isCurrentProductOpen && (
-                <Search isVisible={!isExpanded}>
+            {isNavbarExpanded && (
+                <Search isVisible={!isMenuExpanded}>
                     <CiSearch size={23} />
                     <input type="text" placeholder="поиск: жидкости" onChange={handleSearch} />
                 </Search>
             )}
-            <NavLogo isVisible={!isExpanded} isAnimating={isAnimating} onClick={handleClick}>
+            <NavLogo isVisible={!isMenuExpanded} isAnimating={isAnimating} onClick={handleClick}>
                 <LogoIcon />
             </NavLogo>
-            {!isCurrentProductOpen && (
+            {isNavbarExpanded && (
                 <IndicatorContainer>
                     {menuItems.map((item) => (
                         <IndicatorDot key={item.id} isActive={item.id === activeItem} />

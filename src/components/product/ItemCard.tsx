@@ -75,7 +75,7 @@ const ItemCard: FC<ItemCardProps> = ({
         }
     };
 
-    const handleFocus = () => {
+    const handleInputFocus = () => {
         if (setLocalValues) {
             setLocalValues((prev) => ({
                 ...prev,
@@ -117,7 +117,7 @@ const ItemCard: FC<ItemCardProps> = ({
                     min="0"
                     max={item.amount}
                     value={inputValue}
-                    onFocus={handleFocus}
+                    onFocus={handleInputFocus}
                     onBlur={handleInputBlur}
                     onChange={handleInputChange}
                 />

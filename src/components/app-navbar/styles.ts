@@ -36,7 +36,6 @@ export const CartIcon = styled.div`
     height: 55px;
     border-radius: 45px;
     background-color: #00aa6b;
-    //box-shadow: 0 0 4px #00aa6b;
     left: 50%;
     top: 0;
     transform: translate(-50%, -50%);
@@ -45,7 +44,7 @@ export const CartIcon = styled.div`
     align-items: center;
     z-index: 20;
     a {
-        color: #fff;
+        color: #fff !important;
         display: flex;
     }
 `;

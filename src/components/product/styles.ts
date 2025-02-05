@@ -101,7 +101,7 @@ export const ItemCatalogWrapper = styled.div`
 export const ItemCatalog = styled.div<{ isOutOfStock: boolean }>`
     justify-items: center;
     display: grid;
-    padding: ${({ isOutOfStock }) => (isOutOfStock ? "50px 20px 200px" : "25px 20px 50px")};
+    padding: ${({ isOutOfStock }) => (isOutOfStock ? "50px 20px 300px" : "25px 20px 50px")};
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     row-gap: 20px;
     column-gap: 5px;

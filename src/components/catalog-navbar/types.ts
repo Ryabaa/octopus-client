@@ -4,3 +4,7 @@ export type MenuItem = {
     label: string;
     category: string;
 };
+
+export type CatalogNavbarState = {
+    isExpanded: boolean;
+};

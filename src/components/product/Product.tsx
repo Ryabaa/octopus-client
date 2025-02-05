@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { RootState } from "@app/store";
 import { useAppDispatch, useAppSelector } from "@hooks/reduxHooks";
-import { closeCurrentProduct, getCurrentProduct } from "@components/catalog/slice";
+
 import {
     ItemInfoContainer,
     ItemInfo,
@@ -17,11 +17,13 @@ import {
 
 import { Loader } from "@components/loader/Loader";
 import Items from "./Items";
+import MixCounter from "./MixCounter";
 
 import { FaRegHeart } from "react-icons/fa6";
-import { resetProductItems } from "@components/cart/slice";
 
-import MixCounter from "./MixCounter";
+import { resetProductItems } from "@components/cart/slice";
+import { collapseCatalogNavbar, expandCatalogNavbar } from "@components/catalog-navbar/slice";
+import { closeCurrentProduct, getCurrentProduct } from "@components/catalog/slice";
 
 const Product: FC = () => {
     const dispatch = useAppDispatch();
@@ -38,17 +40,19 @@ const Product: FC = () => {
     const itemsSelected =
         items && isCurrentProductFetched
             ? items
-                  .filter((item) => item.productId === product.id)
-                  .reduce((total, item) => total + item.count, 0)
+                  .filter((item: any) => item.productId === product.id)
+                  .reduce((total: any, item: any) => total + item.count, 0)
             : 0;
 
     useEffect(() => {
         if (id) {
+            dispatch(collapseCatalogNavbar());
             dispatch(getCurrentProduct(Number(id)));
             setIsCurrentProductFetched(true);
         }
 
         return () => {
+            dispatch(expandCatalogNavbar());
             dispatch(closeCurrentProduct());
         };
     }, [id]);
@@ -108,7 +112,7 @@ const Product: FC = () => {
             </ItemCatalogWrapper>
         </ItemWrapper>
     ) : (
-        <Loader />
+        <Loader size={80} position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" />
     );
 };
 
