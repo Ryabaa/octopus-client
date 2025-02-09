@@ -29,7 +29,8 @@ export const NavbarWrapper = styled.nav`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #e3e3e3;
+    border-bottom: 1px solid #4b4b4b;
+    background: #333;
 `;
 
 export const NavLogo = styled.div<{ isAnimating: boolean; isVisible: boolean }>`
@@ -61,7 +62,7 @@ export const MenuContainer = styled.div<{ isExpanded: boolean }>`
     height: 50px;
     width: ${({ isExpanded }) => (isExpanded ? "min-content" : "0px")};
     border-radius: 2px 20px 20px 2px;
-    background: #727272;
+    background: #141414;
     padding-left: 10px;
     transition: all 0.2s ease-in-out;
     margin-left: ${({ isExpanded }) => (isExpanded ? "0px" : "400px")};
@@ -79,11 +80,11 @@ export const MenuButton = styled.button<{ isActive?: boolean }>`
     transition: all 0.2s ease-in-out;
     svg {
         width: 26px;
-        fill: ${({ isActive }) => (isActive ? "#00aa6b" : "#fff")};
+        fill: ${({ isActive }) => (isActive ? "#00aa6b" : "#b7b7b9")};
     }
     .all-asort {
         fill: ${({ isActive }) => (isActive ? "#00aa6b" : "none")};
-        stroke: ${({ isActive }) => (isActive ? "none" : "#fff")};
+        stroke: ${({ isActive }) => (isActive ? "none" : "#b7b7b9")};
     }
 `;
 
@@ -98,7 +99,7 @@ export const MenuToggler = styled.div<{ isVisible: boolean }>`
     width: ${({ isVisible }) => (isVisible ? "unset" : "7px")};
     height: ${({ isVisible }) => (isVisible ? "unset" : "50px")};
     svg {
-        color: ${({ isVisible }) => (isVisible ? "#787878" : "unset")};
+        color: ${({ isVisible }) => (isVisible ? "#b7b7b9" : "unset")};
         visibility: ${({ isVisible }) => (isVisible ? "visible" : "hidden")};
         width: 32px;
         height: 32px;
@@ -116,19 +117,20 @@ export const Search = styled.div<{ isVisible: boolean }>`
     margin-left: ${({ isVisible }) => (isVisible ? "0px" : "400px")};
     transition: all 0.2s ease-in-out;
     svg {
-        color: #787878;
+        color: #b7b7b9;
         transform: rotate(90deg);
         position: absolute;
         left: 15px;
     }
     input {
-        background: #e3e3e3;
+        background: #383838;
+        box-shadow: 0 3px 7px rgba(0, 0, 0, 0.11);
         width: 200px;
         transition: all 0.3s ease;
         height: 100%;
         border-radius: 15px;
         padding: 0 20px 0 50px;
-        color: #787878;
+        color: #b7b7b9;
         font-size: 14px;
     }
 `;
@@ -139,18 +141,18 @@ export const IndicatorContainer = styled.div`
     gap: 8px;
     position: absolute;
     bottom: -2px;
-    background: #fff;
+    //background: #333333;
     height: 5px;
     left: 50%;
-    padding: 0 10px;
+    //padding: 0 10px;
     transform: translate(-50%, 0);
 `;
 
 export const IndicatorDot = styled.div<{ isActive: boolean }>`
-    width: 4px;
-    height: 4px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
     transform: ${({ isActive }) => (isActive ? "scale(1.5)" : "unset")};
-    background-color: ${({ isActive }) => (isActive ? "#00aa6b" : "#b0b0b0")};
+    background-color: ${({ isActive }) => (isActive ? "#00aa6b" : "#b7b7b9")};
     transition: background-color 0.3s ease;
 `;

@@ -6,5 +6,7 @@ export type CartItem = {
 
 export type CartState = {
     items: CartItem[];
-    totalAmount: number;
+    isCartOpened: boolean;
+    productCount: Record<string, number>;
+    cartCount: number;
 };

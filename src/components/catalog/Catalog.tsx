@@ -21,6 +21,7 @@ import { RootState } from "@app/store";
 
 import { FaRegHeart } from "react-icons/fa6";
 import { Loader } from "@components/loader/Loader";
+import getAvailableLength from "@utils/getAvailableLength";
 
 const categories = ["all", "liquids", "vapes", "accessories", "disposable", "snus"];
 
@@ -98,7 +99,8 @@ const Catalog: FC = () => {
                                         <h3>{product.name}</h3>
                                         <ItemInfo>
                                             <h2>
-                                                Видов в наличии: <span>{product.items?.length || 0}</span>
+                                                Видов в наличии:
+                                                <span> {getAvailableLength(product.items)}</span>
                                             </h2>
                                             <p>
                                                 От <span>7.6</span> до <span>9.4 BYN</span>

@@ -5,7 +5,7 @@ type MixedItem = {
 
 export const calculateMix = (items: any, desiredTotal: number): MixedItem[] => {
     const minPercentage = 0.1;
-    const totalAvailable = items.reduce((sum: any, item: any) => sum + item.amount, 0);
+    const totalAvailable = items.reduce((sum: any, item: any) => sum + item.availability, 0);
 
     if (totalAvailable === 0) {
         return items.map((item: any) => ({
@@ -14,10 +14,10 @@ export const calculateMix = (items: any, desiredTotal: number): MixedItem[] => {
         }));
     }
 
-    const maxAmount = Math.max(...items.map((item: any) => item.amount));
-    const filteredItems = items.filter((item: any) => item.amount / maxAmount >= minPercentage);
+    const maxAmount = Math.max(...items.map((item: any) => item.availability));
+    const filteredItems = items.filter((item: any) => item.availability / maxAmount >= minPercentage);
 
-    let filteredTotalAvailable = filteredItems.reduce((sum: any, item: any) => sum + item.amount, 0);
+    let filteredTotalAvailable = filteredItems.reduce((sum: any, item: any) => sum + item.availability, 0);
 
     if (filteredTotalAvailable === 0) {
         return filteredItems.map((item: any) => ({
@@ -27,18 +27,18 @@ export const calculateMix = (items: any, desiredTotal: number): MixedItem[] => {
     }
 
     if (filteredTotalAvailable < desiredTotal) {
-        const excludedItems = items.filter((item: any) => item.amount / maxAmount < minPercentage);
+        const excludedItems = items.filter((item: any) => item.availability / maxAmount < minPercentage);
         for (const item of excludedItems) {
             if (filteredTotalAvailable >= desiredTotal) break;
             filteredItems.push(item);
-            filteredTotalAvailable += item.amount;
+            filteredTotalAvailable += item.availability;
         }
     }
 
     const proportions = filteredItems.map((item: any) => ({
         id: item.id,
-        proportion: item.amount / filteredTotalAvailable,
-        available: item.amount,
+        proportion: item.availability / filteredTotalAvailable,
+        available: item.availability,
     }));
 
     const mix = proportions.map((item: any) => ({

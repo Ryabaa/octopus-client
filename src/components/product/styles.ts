@@ -1,14 +1,16 @@
 import styled from "styled-components";
 
 export const ItemWrapper = styled.div`
-    width: 100vw;
+    width: 500px;
     height: 100vh;
     overflow-y: auto;
     margin-top: 75px;
-    background-color: #e3e3e3;
     display: flex;
     flex-direction: column;
     align-items: center;
+    @media (max-width: 500px) {
+        width: 100vw;
+    }
 `;
 
 export const ItemInfo = styled.div`
@@ -17,7 +19,7 @@ export const ItemInfo = styled.div`
     display: flex;
     justify-content: center;
     align-content: center;
-    column-gap: 20px;
+    column-gap: 40px;
 `;
 
 export const Favorite = styled.div`
@@ -35,7 +37,7 @@ export const Favorite = styled.div`
 export const ItemInfoContainer = styled.div`
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     flex-direction: column;
     row-gap: 10px;
     padding: 30px 0;
@@ -45,22 +47,21 @@ export const ItemInfoContainer = styled.div`
         border-radius: 30px;
     }
     svg {
-        color: #787878;
+        color: #b7b7b9;
     }
     p {
-        text-align: center;
-        color: #787878;
+        color: #b7b7b9;
     }
     h2 {
-        color: #787878;
+        color: #b7b7b9;
         font-size: 15px;
         font-weight: 700;
+        width: 150px;
     }
     h3 {
-        color: #787878;
+        color: #b7b7b9;
         font-weight: 500;
         font-size: 14px;
-        width: 120px;
         span {
             font-size: 14px;
             color: #00aa6b;
@@ -91,7 +92,8 @@ export const ItemCatalogWrapper = styled.div`
     width: 100%;
     flex: 1;
     border-radius: 70px 70px 0 0;
-    background-color: #fafafa;
+    background: #333333;
+    background: linear-gradient(180deg, #333333ff 0%, #000000ff 100%);
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -99,13 +101,12 @@ export const ItemCatalogWrapper = styled.div`
 `;
 
 export const ItemCatalog = styled.div<{ isOutOfStock: boolean }>`
-    justify-items: center;
     display: grid;
-    padding: ${({ isOutOfStock }) => (isOutOfStock ? "50px 20px 300px" : "25px 20px 50px")};
+    padding: ${({ isOutOfStock }) => (isOutOfStock ? "50px 5px 300px" : "25px 5px 50px")};
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     row-gap: 20px;
     column-gap: 5px;
-    width: 100%;
+    width: 320px;
 `;
 
 export const StyledItemCard = styled.div<{ isOutOfStock: boolean }>`
@@ -115,10 +116,10 @@ export const StyledItemCard = styled.div<{ isOutOfStock: boolean }>`
     flex-direction: column;
     width: 150px;
     height: 110px;
-    background-color: #fff;
+    background: #141414;
     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.11);
     border-radius: 15px;
-    color: #787878;
+    color: #b7b7b9;
     position: relative;
     opacity: ${({ isOutOfStock }) => (isOutOfStock ? 0.5 : 1)};
     h3 {
@@ -168,8 +169,8 @@ export const ItemCounter = styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 0 0 15px 15px;
-    background-color: #0000003a;
-    color: #787878;
+    background-color: #222222;
+    color: #b7b7b9;
     button {
         display: flex;
         justify-content: center;
@@ -177,7 +178,7 @@ export const ItemCounter = styled.div`
         background-color: unset;
     }
     svg {
-        color: #fff;
+        color: #b7b7b9;
     }
     input {
         width: 35px;
@@ -187,7 +188,7 @@ export const ItemCounter = styled.div`
         position: absolute;
         left: 50%;
         background: unset;
-        color: #fff;
+        color: #b7b7b9;
         transform: translate(-50%, 0);
         font-size: 15px;
         &::-webkit-outer-spin-button,
@@ -198,18 +199,17 @@ export const ItemCounter = styled.div`
     }
 `;
 
-export const ActionMenu = styled.div<{ isActive: boolean }>`
+export const ActionMenu = styled.div<{ isActive: boolean; isExpanded: boolean | undefined }>`
     display: grid;
     margin-top: 15px;
     position: relative;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: ${({ isExpanded }) => (isExpanded ? "1fr" : "repeat(2, 1fr)")};
     align-items: center;
     justify-items: center;
-    background: #fff;
-    transition: all 0.6s ease;
+    background: #333;
     border-radius: ${({ isActive }) => (isActive ? "15px 15px 15px 0" : "15px")};
-    width: 85%;
-    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.11);
+    width: 320px;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.26);
     margin-bottom: 30px;
     z-index: 2;
     button {
@@ -217,14 +217,18 @@ export const ActionMenu = styled.div<{ isActive: boolean }>`
         font-size: 15px;
         background: unset;
         height: 50px;
-        color: #787878;
+        color: #b7b7b9;
         border-radius: 0 15px 15px 0;
-        &:first-child {
-            border-radius: 15px 0 0 15px;
-            border-right: 1px solid #e3e3e3;
-        }
         &:active {
             background: #a0a0a057;
+        }
+        &:first-child {
+            ${({ isExpanded, isActive }) =>
+                !isExpanded &&
+                `
+      border-radius: ${isActive ? "15px 0 0 0" : "15px 0 0 15px"};
+      border-right: 1px solid #4b4b4b;
+      `}
         }
     }
 `;
@@ -238,12 +242,16 @@ export const ActionMenuCounter = styled.div<{ isActive: boolean }>`
     border-radius: 0 0 15px 15px;
     transform: translate(0, 100%);
     visibility: ${({ isActive }) => (isActive ? "visible" : "hidden")};
+    opacity: ${({ isActive }) => (isActive ? "1" : "0")};
     button {
         border: 0 !important;
         height: 35px;
+        visibility: ${({ isActive }) => (isActive ? "visible" : "hidden")};
+        height: ${({ isActive }) => (isActive ? "35px" : "0")} !important;
     }
     div {
         transition: all 0.2s ease;
+        visibility: ${({ isActive }) => (isActive ? "visible" : "hidden")};
         height: ${({ isActive }) => (isActive ? "35px" : "0")} !important;
     }
 `;

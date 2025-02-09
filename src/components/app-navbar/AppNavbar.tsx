@@ -1,24 +1,29 @@
 import { FC } from "react";
 import { NavLink } from "react-router-dom";
 
-import { NavbarWrapper, CartIcon, CartBorder, Container } from "./styles";
+import { NavbarWrapper, CartIcon, Container, CartCounter } from "./styles";
 
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { FaRegHeart, FaUser } from "react-icons/fa";
 import { PiPokerChip } from "react-icons/pi";
 import { AiFillHome } from "react-icons/ai";
 
+import { useAppSelector } from "@hooks/reduxHooks";
+import { RootState } from "@app/store";
+
 const AppNavbar: FC = () => {
+    const { isCartOpened, cartCount } = useAppSelector((state: RootState) => state.cart);
+
     return (
         <NavbarWrapper>
-            <CartIcon>
+            <CartIcon isTranslated={isCartOpened}>
                 <NavLink to="/cart">
                     <MdOutlineShoppingCart size={20} />
                 </NavLink>
+                {!isCartOpened && cartCount > 0 && <CartCounter>{cartCount}</CartCounter>}
             </CartIcon>
-            <CartBorder />
             <Container>
-                <NavLink to="/catalog" className={({ isActive }) => (isActive ? "active" : "")}>
+                <NavLink to="/catalog/all" className={({ isActive }) => (isActive ? "active" : "")}>
                     <AiFillHome size={20} />
                 </NavLink>
                 <NavLink to="/favorites" className={({ isActive }) => (isActive ? "active" : "")}>

@@ -1,40 +1,38 @@
 import { ChangeEvent, FC, FocusEvent, MouseEvent } from "react";
-import { useAppDispatch } from "@hooks/reduxHooks";
+
 import { updateItemCount } from "@components/cart/slice";
+
 import { FaPlus, FaMinus } from "react-icons/fa";
+
 import { ItemCounter, ItemSide, StyledItemCard } from "./styles";
+
+import { useAppDispatch, useAppSelector } from "@hooks/reduxHooks";
+import { RootState } from "@app/store";
 
 interface ItemCardProps {
     item: any;
-    cartItem?: { count: number };
     localValues?: { [key: string]: string };
     setLocalValues?: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
-    productId?: string;
-    isOutOfStock?: boolean;
+    isOutOfStock: boolean;
 }
 
-const ItemCard: FC<ItemCardProps> = ({
-    item,
-    cartItem,
-    localValues,
-    setLocalValues,
-    productId,
-    isOutOfStock = false,
-}) => {
+const ItemCard: FC<ItemCardProps> = ({ item, localValues, setLocalValues, isOutOfStock }) => {
     const dispatch = useAppDispatch();
-    const inputValue = localValues?.[item.id] ?? (cartItem ? cartItem.count.toString() : "0");
+    const product = useAppSelector((state: RootState) => state.catalog.currentProduct);
+
+    const inputValue = localValues?.[item?.id] ?? (item ? item.count?.toString() : "0");
 
     const handleButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
-        if (!productId || !setLocalValues) return;
+        if (isOutOfStock) return;
 
         const action = event.currentTarget.dataset.action;
         const actionNumber = action === "increment" ? 1 : -1;
 
         const currentCount = Number(inputValue);
         const newCount = Math.max(currentCount + actionNumber, 0);
-        if (newCount <= item.amount) {
-            dispatch(updateItemCount({ productId, itemId: item.id, count: newCount }));
-            setLocalValues((prev) => ({
+        if (newCount <= item.availability) {
+            dispatch(updateItemCount({ productId: product.id, itemId: item.id, count: newCount }));
+            setLocalValues!((prev) => ({
                 ...prev,
                 [item.id]: newCount.toString(),
             }));
@@ -42,11 +40,11 @@ const ItemCard: FC<ItemCardProps> = ({
     };
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (!setLocalValues) return;
+        if (isOutOfStock) return;
 
         const newValue = event.target.value;
         if (newValue === "" || /^[0-9]+$/.test(newValue)) {
-            setLocalValues((prev) => ({
+            setLocalValues!((prev) => ({
                 ...prev,
                 [item.id]: newValue,
             }));
@@ -54,21 +52,21 @@ const ItemCard: FC<ItemCardProps> = ({
     };
 
     const handleInputBlur = (event: FocusEvent<HTMLInputElement>) => {
-        if (!productId || !setLocalValues) return;
+        if (isOutOfStock) return;
 
         const value = event.target.value;
         const newCount = Number(value);
 
         if (value !== "") {
-            const validatedCount = Math.min(newCount, item.amount);
-            dispatch(updateItemCount({ productId, itemId: item.id, count: validatedCount }));
-            setLocalValues((prev) => ({
+            const validatedCount = Math.min(newCount, item.availability);
+            dispatch(updateItemCount({ productId: product.id, itemId: item.id, count: validatedCount }));
+            setLocalValues!((prev) => ({
                 ...prev,
                 [item.id]: validatedCount.toString(),
             }));
         } else {
-            const fallbackCount = cartItem ? cartItem.count : 0;
-            setLocalValues((prev) => ({
+            const fallbackCount = item.count;
+            setLocalValues!((prev) => ({
                 ...prev,
                 [item.id]: fallbackCount.toString(),
             }));
@@ -106,7 +104,7 @@ const ItemCard: FC<ItemCardProps> = ({
         <StyledItemCard isOutOfStock={false}>
             <h3>{item.name}</h3>
             <p>
-                В наличии: <span>{item.amount}</span>
+                В наличии: <span>{item.availability}</span>
             </p>
             <ItemCounter>
                 <button>
@@ -115,7 +113,7 @@ const ItemCard: FC<ItemCardProps> = ({
                 <input
                     type="number"
                     min="0"
-                    max={item.amount}
+                    max={item.availability}
                     value={inputValue}
                     onFocus={handleInputFocus}
                     onBlur={handleInputBlur}

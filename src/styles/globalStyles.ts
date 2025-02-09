@@ -25,11 +25,11 @@ const GlobalStyles = createGlobalStyle`
   button, a {
     cursor: pointer;
     transition: all 0.3s ease;
-    color: #4e4e4e;
+    color: #b7b7b9;
   }
 
   input, textarea{
-    color: #4e4e4e;
+    color: #b7b7b9;
     border-radius: 3px;
   }
 
@@ -37,25 +37,19 @@ const GlobalStyles = createGlobalStyle`
     display: flex;
     justify-content: center;
     background-size: cover;
-    background: #fafafa;
+    background: #333333;
+    background: linear-gradient(180deg, #333333ff 0%, #000000ff 100%);
     height: 100%;
     width: 100%;
     overflow: hidden;
   }
 
   ::-webkit-scrollbar {
-    width: 7px;
-    height: 8px;
-    background: unset;
+    display: none;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #c5c5c5;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-    &:hover {
-        background-color: #aaaaaa;
-    }
+    display: none;
 }
 
 ::-webkit-scrollbar-button {

@@ -6,7 +6,8 @@ export const AuthWrapper = styled.div`
     justify-content: center;
     min-height: 100%;
     padding-top: 50px;
-    background-color: #e3e3e3;
+    background: #333333;
+    background: linear-gradient(180deg, #333333ff 0%, #000000ff 100%);
 `;
 
 export const AuthContainer = styled.div`
@@ -33,8 +34,8 @@ export const Tab = styled.div.attrs<TabProps>({})`
     padding: 10px;
     font-weight: 400;
     text-align: center;
-    background: ${({ $isActive }) => ($isActive ? "#fff" : "#00000052")};
-    color: ${({ $isActive }) => ($isActive ? "unset" : "#fff")};
+    background: ${({ $isActive }) => ($isActive ? "#b7b7b9" : "#141414")};
+    color: ${({ $isActive }) => ($isActive ? "unset" : "#b7b7b9")};
     border-radius: 0 15px 15px 0;
     &:first-child {
         border-radius: 15px 0 0 15px;
@@ -46,6 +47,7 @@ export const Logo = styled.div`
         width: 80px;
         height: 80px;
         margin: 30px 0;
+        fill: #b7b7b9;
     }
 `;
 
@@ -69,7 +71,7 @@ export const InputContainer = styled.div<{ isError?: boolean }>`
             position: absolute;
             left: 20px;
             top: 15px;
-            color: #fff;
+            color: #b7b7b9;
         }
         p {
             visibility: ${({ isError }) => (isError ? "visible" : "hidden")};
@@ -83,19 +85,20 @@ export const Input = styled.input`
     width: 100%;
     border-radius: 30px;
     text-align: center;
-    background-color: #00000052;
-    color: #ffffff;
+    background-color: #141414;
+    color: #b7b7b9;
     &::placeholder {
-        color: #ffffff;
+        color: #b7b7b9;
     }
 `;
 
 export const Button = styled.button`
     height: 50px;
     width: 100%;
-    background-color: #ffffff;
+    background-color: #b7b7b9;
     border-radius: 30px;
     font-size: 14px;
+    color: #141414;
 `;
 
 export const Container = styled.div`
@@ -112,8 +115,8 @@ export const Container = styled.div`
     a {
         height: 50px;
         width: 100%;
-        background-color: #00000052;
-        color: #fff;
+        background-color: #141414;
+        color: #b7b7b9;
         border-radius: 30px;
         display: flex;
         flex-direction: row;

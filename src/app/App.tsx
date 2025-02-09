@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Provider } from "react-redux";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import { store } from "./store";
@@ -28,9 +28,12 @@ const App: FC = () => {
                 <CatalogNavbar />
                 <AppNavbar />
                 <Routes>
+                    <Route path="*" element={<Navigate to="/catalog/all" replace />} />
+
                     <Route path="/catalog/:category" element={<Catalog />} />
                     <Route path="/catalog/item/:id" element={<Product />} />
                     <Route path="/cart" element={<Cart />} />
+                    <Route path="/cart/item/:id" element={<Product isFromCart />} />
 
                     <Route path="/auth/*" element={<Auth />}>
                         <Route path="login" element={<Login />} />

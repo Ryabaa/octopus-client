@@ -3,24 +3,34 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import kick from "@assets/YSueH.jpg";
 
 const sampleProducts = [
-    { id: 1, image: kick, amount: 17, name: "Aegis Boost 2", category: "vapes" },
+    {
+        id: 1,
+        image: kick,
+        name: "Aegis Boost 2",
+        category: "vapes",
+        items: [
+            { id: 1, name: "Красный", availability: 69 },
+            { id: 2, name: "Синий", availability: 3 },
+            { id: 3, name: "Золотистый", availability: 23 },
+            { id: 4, name: "Сиреневый", availability: 0 },
+        ],
+    },
     {
         id: 2,
         image: kick,
-        amount: 17,
         name: "XYLINET Tebe Pizda 50мг",
         category: "liquids",
         items: [
-            { id: 1, name: "Клубничный минет", amount: 69 },
-            { id: 2, name: "Клубничный денис", amount: 3 },
-            { id: 3, name: "Денисова клубника мороженная", amount: 23 },
-            { id: 4, name: "Денисов минет", amount: 0 },
-            { id: 5, name: "Денисов минет", amount: 0 },
-            { id: 6, name: "Денисов минет", amount: 0 },
-            { id: 7, name: "Денисов минет", amount: 23 },
-            { id: 8, name: "Денисов минет", amount: 6 },
-            { id: 9, name: "Денисов минет", amount: 4 },
-            { id: 10, name: "Денисов минет", amount: 2 },
+            { id: 1, name: "Клубничный минет", availability: 69 },
+            { id: 2, name: "Клубничный денис", availability: 3 },
+            { id: 3, name: "Денисова клубника мороженная", availability: 23 },
+            { id: 4, name: "Денисов минет", availability: 0 },
+            { id: 5, name: "Денисов минет", availability: 0 },
+            { id: 6, name: "Денисов минет", availability: 0 },
+            { id: 7, name: "Денисов минет", availability: 23 },
+            { id: 8, name: "Денисов минет", availability: 6 },
+            { id: 9, name: "Денисов минет", availability: 4 },
+            { id: 10, name: "Денисов минет", availability: 2 },
         ],
     },
 ];
@@ -32,7 +42,6 @@ const authInitialState: any = {
     category: "all",
     searchQuery: "",
     currentProduct: null,
-    isCurrentProductOpen: false,
 };
 
 export const catalogSlice = createSlice({
@@ -58,7 +67,14 @@ export const catalogSlice = createSlice({
         getCurrentProduct: (state, action: PayloadAction<number>) => {
             const currentProduct = state.products.find((product: any) => product.id === action.payload);
             if (currentProduct && currentProduct.items) {
-                currentProduct.items.sort((a: any, b: any) => b.amount - a.amount);
+                currentProduct.items.sort((a: any, b: any) => b.availability - a.availability);
+
+                const itemsAvailabilitySum = currentProduct.items.reduce(
+                    (sum: any, item: any) => sum + item.availability,
+                    0
+                );
+
+                currentProduct.itemsAvailabilitySum = itemsAvailabilitySum;
             }
             state.currentProduct = currentProduct;
         },

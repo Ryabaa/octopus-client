@@ -5,11 +5,11 @@ import { ActionMenuCounter, ItemCounter, ItemSide } from "./styles";
 import { FaMinus, FaPlus } from "react-icons/fa";
 
 import { updateMixCount } from "@components/cart/slice";
+
 import { useAppDispatch } from "@hooks/reduxHooks";
 
 interface MixCounterProps {
     isCounterOpened: boolean;
-    itemsSelected: any;
     product: any;
     mixCount: string;
     setMixCount: (value: string) => void;
@@ -23,14 +23,11 @@ const MixCounter: FC<MixCounterProps> = ({
     setMixCount,
     isCounterOpened,
     setIsCounterOpened,
-    itemsSelected,
     handleResetItems,
 }) => {
     const dispatch = useAppDispatch();
 
     const actionMenuCounterRef = useRef<HTMLDivElement>(null);
-
-    const totalAmount = product ? product.items.reduce((sum: any, item: any) => sum + item.amount, 0) : 0;
 
     useEffect(() => {
         const handleClickOutside = (event: any) => {
@@ -57,7 +54,7 @@ const MixCounter: FC<MixCounterProps> = ({
         const currentCount = Number(mixCount);
         const newCount = Math.max(currentCount + actionNumber, 0);
 
-        if (newCount <= totalAmount) {
+        if (newCount <= product.itemsAvailabilitySum) {
             handleResetItems();
             dispatch(updateMixCount({ productId: product.id, items: product.items, desiredTotal: newCount }));
             setMixCount(newCount.toString());
@@ -76,14 +73,14 @@ const MixCounter: FC<MixCounterProps> = ({
         const newCount = Number(value);
 
         if (value !== "") {
-            const validatedCount = Math.min(newCount, totalAmount);
+            const validatedCount = Math.min(newCount, product.itemsAvailabilitySum);
             handleResetItems();
             dispatch(
                 updateMixCount({ productId: product.id, items: product.items, desiredTotal: validatedCount })
             );
             setMixCount(validatedCount.toString());
         } else {
-            setMixCount(itemsSelected.toString());
+            setMixCount(product.itemsAvailabilitySum.toString());
         }
     };
 
@@ -100,7 +97,7 @@ const MixCounter: FC<MixCounterProps> = ({
                 <input
                     type="number"
                     min="0"
-                    max={totalAmount}
+                    max={product.itemsAvailabilitySum}
                     value={mixCount}
                     onFocus={handleInputFocus}
                     onBlur={handleInputBlur}
