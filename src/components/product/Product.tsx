@@ -104,7 +104,12 @@ const Product: FC<ProductProps> = ({ isFromCart }) => {
             <ItemCatalogWrapper>
                 <Line width={"90px"} color={"#cecece"} />
                 <ActionMenu isActive={isCounterOpened} isExpanded={isFromCart}>
-                    {!isFromCart && <button onClick={handleToggleCounter}>Микс вкусов</button>}
+                    {!isFromCart && (
+                        <button onClick={handleToggleCounter}>
+                            Микс вкусов{" "}
+                            <span>{!isCounterOpened && mixCount !== "0" && `- ${mixCount} шт.`}</span>
+                        </button>
+                    )}
                     <button onClick={handleResetItems}>
                         {isFromCart ? "Удалить товар" : "Сбросить выбор"}
                     </button>

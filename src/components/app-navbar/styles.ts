@@ -6,7 +6,7 @@ export const NavbarWrapper = styled.nav`
     left: 50%;
     transform: translate(-50%, 0);
     background: #141414;
-    width: 96%;
+    width: 700px;
     height: 70px;
     z-index: 10;
     color: #b7b7b9;
@@ -17,6 +17,9 @@ export const NavbarWrapper = styled.nav`
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
+    @media (max-width: 500px) {
+        width: 96%;
+    }
     a {
         color: #b7b7b9;
         &.active {

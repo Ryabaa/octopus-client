@@ -80,7 +80,7 @@ const MixCounter: FC<MixCounterProps> = ({
             );
             setMixCount(validatedCount.toString());
         } else {
-            setMixCount(product.itemsAvailabilitySum.toString());
+            setMixCount("0");
         }
     };
 

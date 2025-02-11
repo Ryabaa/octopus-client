@@ -4,7 +4,7 @@ import { updateItemCount } from "@components/cart/slice";
 
 import { FaPlus, FaMinus } from "react-icons/fa";
 
-import { ItemCounter, ItemSide, StyledItemCard } from "./styles";
+import { ItemCounter, StyledItemCard } from "./styles";
 
 import { useAppDispatch, useAppSelector } from "@hooks/reduxHooks";
 import { RootState } from "@app/store";
@@ -107,7 +107,7 @@ const ItemCard: FC<ItemCardProps> = ({ item, localValues, setLocalValues, isOutO
                 В наличии: <span>{item.availability}</span>
             </p>
             <ItemCounter>
-                <button>
+                <button data-action="decrement" onClick={handleButtonClick}>
                     <FaMinus size={18} />
                 </button>
                 <input
@@ -119,14 +119,10 @@ const ItemCard: FC<ItemCardProps> = ({ item, localValues, setLocalValues, isOutO
                     onBlur={handleInputBlur}
                     onChange={handleInputChange}
                 />
-                <button>
+                <button data-action="increment" onClick={handleButtonClick}>
                     <FaPlus size={18} />
                 </button>
             </ItemCounter>
-            <ItemSide>
-                <button data-action="decrement" onClick={handleButtonClick} className="left"></button>
-                <button data-action="increment" onClick={handleButtonClick} className="right"></button>
-            </ItemSide>
         </StyledItemCard>
     );
 };

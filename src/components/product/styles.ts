@@ -140,6 +140,7 @@ export const ItemSide = styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
+    bottom: 0;
     border-radius: 15px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -176,6 +177,15 @@ export const ItemCounter = styled.div`
         justify-content: center;
         align-items: center;
         background-color: unset;
+        width: 100%;
+        height: 100%;
+        border-radius: 0 0 15px 0 !important;
+        &:first-child {
+            border-radius: 0 0 0 15px !important;
+        }
+        &:active {
+            background: #a0a0a057;
+        }
     }
     svg {
         color: #b7b7b9;
@@ -219,6 +229,9 @@ export const ActionMenu = styled.div<{ isActive: boolean; isExpanded: boolean | 
         height: 50px;
         color: #b7b7b9;
         border-radius: 0 15px 15px 0;
+        span {
+            color: #00aa6b;
+        }
         &:active {
             background: #a0a0a057;
         }

@@ -1,42 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import kick from "@assets/YSueH.jpg";
-
-const sampleProducts = [
-    {
-        id: 1,
-        image: kick,
-        name: "Aegis Boost 2",
-        category: "vapes",
-        items: [
-            { id: 1, name: "Красный", availability: 69 },
-            { id: 2, name: "Синий", availability: 3 },
-            { id: 3, name: "Золотистый", availability: 23 },
-            { id: 4, name: "Сиреневый", availability: 0 },
-        ],
-    },
-    {
-        id: 2,
-        image: kick,
-        name: "XYLINET Tebe Pizda 50мг",
-        category: "liquids",
-        items: [
-            { id: 1, name: "Клубничный минет", availability: 69 },
-            { id: 2, name: "Клубничный денис", availability: 3 },
-            { id: 3, name: "Денисова клубника мороженная", availability: 23 },
-            { id: 4, name: "Денисов минет", availability: 0 },
-            { id: 5, name: "Денисов минет", availability: 0 },
-            { id: 6, name: "Денисов минет", availability: 0 },
-            { id: 7, name: "Денисов минет", availability: 23 },
-            { id: 8, name: "Денисов минет", availability: 6 },
-            { id: 9, name: "Денисов минет", availability: 4 },
-            { id: 10, name: "Денисов минет", availability: 2 },
-        ],
-    },
-];
-
 const authInitialState: any = {
-    products: sampleProducts,
+    products: [],
     filteredProducts: [],
     favorites: [],
     category: "all",
@@ -48,6 +13,9 @@ export const catalogSlice = createSlice({
     name: "Catalog",
     initialState: authInitialState,
     reducers: {
+        fetchProductsSuccess(state, action: PayloadAction<any>) {
+            state.products = action.payload;
+        },
         filterProducts: (state) => {
             const filteredProducts =
                 state.products.filter(
@@ -84,7 +52,13 @@ export const catalogSlice = createSlice({
     },
 });
 
-export const { filterProducts, setCategory, setSearchQuery, getCurrentProduct, closeCurrentProduct } =
-    catalogSlice.actions;
+export const {
+    filterProducts,
+    setCategory,
+    setSearchQuery,
+    getCurrentProduct,
+    closeCurrentProduct,
+    fetchProductsSuccess,
+} = catalogSlice.actions;
 
 export default catalogSlice.reducer;

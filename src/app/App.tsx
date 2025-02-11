@@ -1,9 +1,7 @@
-import { FC } from "react";
-import { Provider } from "react-redux";
+import { FC, useEffect } from "react";
+
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-
-import { store } from "./store";
 
 import GlobalStyles from "@styles/globalStyles";
 
@@ -19,9 +17,17 @@ import Cart from "@components/cart/Cart";
 
 import toastConfig from "@utils/toastConfig";
 
+import { useAppDispatch } from "@hooks/reduxHooks";
+
 const App: FC = () => {
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch({ type: "FETCH_PRODUCTS_REQUEST" });
+    }, [dispatch]);
+
     return (
-        <Provider store={store}>
+        <>
             <GlobalStyles />
             <ToastContainer style={{ lineHeight: "1.5" }} {...toastConfig} />
             <BrowserRouter>
@@ -42,7 +48,7 @@ const App: FC = () => {
                     <Route path="/auth-success" element={<AuthHandler />} />
                 </Routes>
             </BrowserRouter>
-        </Provider>
+        </>
     );
 };
 
