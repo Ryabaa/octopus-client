@@ -22,15 +22,22 @@ export const ItemInfo = styled.div`
     column-gap: 40px;
 `;
 
-export const Favorite = styled.div`
+export const Favorite = styled.div<{ isFavorite: boolean }>`
     display: flex;
     align-items: center;
     flex-direction: column;
+    align-self: center;
     row-gap: 10px;
     margin-top: 10px;
     p {
         font-size: 14px !important;
         margin: 0 !important;
+    }
+    svg {
+        color: ${({ isFavorite }) => (isFavorite ? "#00aa6b" : "#b7b7b9")};
+    }
+    button {
+        background: unset;
     }
 `;
 
@@ -45,9 +52,6 @@ export const ItemInfoContainer = styled.div`
         width: 100px;
         height: 100px;
         border-radius: 30px;
-    }
-    svg {
-        color: #b7b7b9;
     }
     p {
         color: #b7b7b9;

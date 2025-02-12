@@ -28,7 +28,7 @@ export const Line = styled.h4`
     padding: 0;
 `;
 
-export const ItemHead = styled.div`
+export const ItemHead = styled.div<{ isFavorite: boolean }>`
     display: flex;
     justify-content: center;
     column-gap: 20px;
@@ -41,7 +41,10 @@ export const ItemHead = styled.div`
         border-radius: 22px;
     }
     svg {
-        color: #b7b7b9;
+        color: ${({ isFavorite }) => (isFavorite ? "#00aa6b" : "#b7b7b9")};
+    }
+    button {
+        background: unset;
     }
 `;
 

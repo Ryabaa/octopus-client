@@ -14,6 +14,7 @@ import CatalogNavbar from "@components/catalog-navbar/CatalogNavbar";
 import Catalog from "@components/catalog/Catalog";
 import Product from "@components/product/Product";
 import Cart from "@components/cart/Cart";
+import Favorites from "@components/favorites/Favorites";
 
 import toastConfig from "@utils/toastConfig";
 
@@ -38,6 +39,7 @@ const App: FC = () => {
 
                     <Route path="/catalog/:category" element={<Catalog />} />
                     <Route path="/catalog/item/:id" element={<Product />} />
+                    <Route path="/favorites" element={<Favorites />} />
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/cart/item/:id" element={<Product isFromCart />} />
 

@@ -19,12 +19,13 @@ import { filterProducts } from "./slice";
 import { useAppDispatch, useAppSelector } from "@hooks/reduxHooks";
 import { RootState } from "@app/store";
 
-import { FaRegHeart } from "react-icons/fa6";
+import { FaHeart, FaRegHeart } from "react-icons/fa6";
 
 import { Loader } from "@components/loader/Loader";
 
 import getAvailableLength from "@utils/getAvailableLength";
 import { formatPrices } from "@utils/formatPrice";
+import { toggleFavorite } from "@components/favorites/slice";
 
 const categories = ["all", "liquids", "vapes", "accessories", "disposable", "snus"];
 
@@ -34,6 +35,7 @@ const Catalog: FC = () => {
     const { category, searchQuery, products, filteredProducts } = useAppSelector(
         (state: RootState) => state.catalog
     );
+    const favorites = useAppSelector((state: RootState) => state.favorites.favorites);
 
     const [isFiltered, setIsFiltered] = useState(false);
     const [swipeDirection, setSwipeDirection] = useState<string | null>(null);
@@ -83,6 +85,13 @@ const Catalog: FC = () => {
         navigate(`/catalog/item/${productId}`);
     };
 
+    const handleToggleFavorite = (event: MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation();
+        const productId = Number(event.currentTarget.dataset.productId);
+
+        dispatch(toggleFavorite(productId));
+    };
+
     return (
         <CatalogContainer {...handlers}>
             <TransitionGroup>
@@ -96,14 +105,23 @@ const Catalog: FC = () => {
                                         prices[0].value,
                                         prices[prices.length - 1].value,
                                     ];
+                                    const isFavorite = favorites.includes(product.id);
                                     return (
                                         <ProductItem
                                             key={product.id}
                                             data-product-id={product.id}
                                             onClick={handleNavigate}>
-                                            <ItemHead>
+                                            <ItemHead isFavorite={isFavorite}>
                                                 <img src={product.image} alt="" />
-                                                <FaRegHeart size={19} />
+                                                <button
+                                                    data-product-id={product.id}
+                                                    onClick={handleToggleFavorite}>
+                                                    {isFavorite ? (
+                                                        <FaHeart size={19} />
+                                                    ) : (
+                                                        <FaRegHeart size={19} />
+                                                    )}
+                                                </button>
                                             </ItemHead>
                                             <h3>{product.name}</h3>
                                             <ItemInfo>
