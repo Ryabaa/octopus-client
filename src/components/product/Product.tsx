@@ -24,6 +24,7 @@ import { FaRegHeart } from "react-icons/fa6";
 import { resetProductItems, updateProductCount } from "@components/cart/slice";
 import { collapseCatalogNavbar, expandCatalogNavbar } from "@components/catalog-navbar/slice";
 import { closeCurrentProduct, getCurrentProduct } from "@components/catalog/slice";
+import { formatPrices } from "@utils/formatPrice";
 
 type ProductProps = {
     isFromCart?: boolean;
@@ -35,6 +36,7 @@ const Product: FC<ProductProps> = ({ isFromCart }) => {
 
     const { id } = useParams();
     const product = useAppSelector((state: RootState) => state.catalog.currentProduct);
+    const products = useAppSelector((state: RootState) => state.catalog.products);
     const productCount = useAppSelector((state: RootState) => state.cart.productCount);
 
     const [isCurrentProductFetched, setIsCurrentProductFetched] = useState(false);
@@ -57,7 +59,7 @@ const Product: FC<ProductProps> = ({ isFromCart }) => {
             dispatch(expandCatalogNavbar());
             dispatch(closeCurrentProduct());
         };
-    }, [id, productCount]);
+    }, [id, productCount, products]);
 
     useEffect(() => {
         if (isCurrentProductFetched && product) {
@@ -93,11 +95,11 @@ const Product: FC<ProductProps> = ({ isFromCart }) => {
                     </h3>
                     <Line width={"120px"} color={"#4b4b4b"} />
                     <ItemPrice>
-                        <p>От 5 - 9р/шт</p>
-                        <p>От 10 - 8.5р/шт</p>
-                        <p>От 20 - 8.1р/шт</p>
-                        <p>От 50 - 7.8р/шт</p>
-                        <p>От 100 - 7.5р/шт</p>
+                        {formatPrices(product.price).map((price, index) => (
+                            <p key={index}>
+                                От {price.key} - {price.value}р/шт.
+                            </p>
+                        ))}
                     </ItemPrice>
                 </ItemInfoContainer>
             </ItemInfo>

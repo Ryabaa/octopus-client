@@ -20,8 +20,11 @@ import { useAppDispatch, useAppSelector } from "@hooks/reduxHooks";
 import { RootState } from "@app/store";
 
 import { FaRegHeart } from "react-icons/fa6";
+
 import { Loader } from "@components/loader/Loader";
+
 import getAvailableLength from "@utils/getAvailableLength";
+import { formatPrices } from "@utils/formatPrice";
 
 const categories = ["all", "liquids", "vapes", "accessories", "disposable", "snus"];
 
@@ -87,28 +90,36 @@ const Catalog: FC = () => {
                     <FadeTransition key={category} timeout={300} direction={swipeDirection} classNames="fade">
                         <ProductList>
                             {isFiltered ? (
-                                filteredProducts.map((product: any) => (
-                                    <ProductItem
-                                        key={product.id}
-                                        data-product-id={product.id}
-                                        onClick={handleNavigate}>
-                                        <ItemHead>
-                                            <img src={product.image} alt="" />
-                                            <FaRegHeart size={19} />
-                                        </ItemHead>
-                                        <h3>{product.name}</h3>
-                                        <ItemInfo>
-                                            <h2>
-                                                Видов в наличии:
-                                                <span> {getAvailableLength(product.items)}</span>
-                                            </h2>
-                                            <p>
-                                                От <span>7.6</span> до <span>9.4 BYN</span>
-                                            </p>
-                                        </ItemInfo>
-                                        <Line />
-                                    </ProductItem>
-                                ))
+                                filteredProducts.map((product: any) => {
+                                    const prices = formatPrices(product.price);
+                                    const [minPrice, maxPrice] = [
+                                        prices[0].value,
+                                        prices[prices.length - 1].value,
+                                    ];
+                                    return (
+                                        <ProductItem
+                                            key={product.id}
+                                            data-product-id={product.id}
+                                            onClick={handleNavigate}>
+                                            <ItemHead>
+                                                <img src={product.image} alt="" />
+                                                <FaRegHeart size={19} />
+                                            </ItemHead>
+                                            <h3>{product.name}</h3>
+                                            <ItemInfo>
+                                                <h2>
+                                                    Видов в наличии:
+                                                    <span> {getAvailableLength(product.items)}</span>
+                                                </h2>
+                                                <p>
+                                                    От <span>{minPrice} BYN</span> до
+                                                    <span> {maxPrice} BYN</span>
+                                                </p>
+                                            </ItemInfo>
+                                            <Line />
+                                        </ProductItem>
+                                    );
+                                })
                             ) : (
                                 <Loader
                                     size={80}
