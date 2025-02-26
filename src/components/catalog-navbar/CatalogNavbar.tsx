@@ -50,6 +50,7 @@ const CatalogNavbar: FC = () => {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const isNavbarExpanded = useAppSelector((state: RootState) => state.catalogNavbar.isExpanded);
     const { category } = useAppSelector((state: RootState) => state.catalog);
+    const isAuthOpened = useAppSelector((state: RootState) => state.auth.isOpened);
 
     const [clickCount, setClickCount] = useState<number>(0);
     const [timer, setTimer] = useState<number | null>(null);
@@ -110,40 +111,42 @@ const CatalogNavbar: FC = () => {
     };
 
     return (
-        <NavbarWrapper tabIndex={0} onBlur={handleBlur} ref={containerRef}>
-            <MenuToggler isVisible={!isMenuExpanded} onClick={handleToggle}>
-                <BsFillGrid1X2Fill size={23} />
-            </MenuToggler>
-            <MenuContainer isExpanded={isMenuExpanded}>
-                {menuItems.map((item) => (
-                    <MenuButton
-                        key={item.id}
-                        isActive={item.id === activeItem}
-                        onClick={() => handleSelectItem(item.id, item.category)}>
-                        <span className="icon">{item.icon}</span>
-                    </MenuButton>
-                ))}
-                <MenuButton isActive={true} onClick={handleToggle}>
-                    <IoIosArrowBack size={20} />
-                </MenuButton>
-            </MenuContainer>
-            {isNavbarExpanded && (
-                <Search isVisible={!isMenuExpanded}>
-                    <CiSearch size={23} />
-                    <input type="text" placeholder="поиск: жидкости" onChange={handleSearch} />
-                </Search>
-            )}
-            <NavLogo isVisible={!isMenuExpanded} isAnimating={isAnimating} onClick={handleClick}>
-                <LogoIcon />
-            </NavLogo>
-            {isNavbarExpanded && (
-                <IndicatorContainer>
+        !isAuthOpened && (
+            <NavbarWrapper tabIndex={0} onBlur={handleBlur} ref={containerRef}>
+                <MenuToggler isVisible={!isMenuExpanded} onClick={handleToggle}>
+                    <BsFillGrid1X2Fill size={23} />
+                </MenuToggler>
+                <MenuContainer isExpanded={isMenuExpanded}>
                     {menuItems.map((item) => (
-                        <IndicatorDot key={item.id} isActive={item.id === activeItem} />
+                        <MenuButton
+                            key={item.id}
+                            isActive={item.id === activeItem}
+                            onClick={() => handleSelectItem(item.id, item.category)}>
+                            <span className="icon">{item.icon}</span>
+                        </MenuButton>
                     ))}
-                </IndicatorContainer>
-            )}
-        </NavbarWrapper>
+                    <MenuButton isActive={true} onClick={handleToggle}>
+                        <IoIosArrowBack size={20} />
+                    </MenuButton>
+                </MenuContainer>
+                {isNavbarExpanded && (
+                    <Search isVisible={!isMenuExpanded}>
+                        <CiSearch size={23} />
+                        <input type="text" placeholder="поиск: жидкости" onChange={handleSearch} />
+                    </Search>
+                )}
+                <NavLogo isVisible={!isMenuExpanded} isAnimating={isAnimating} onClick={handleClick}>
+                    <LogoIcon />
+                </NavLogo>
+                {isNavbarExpanded && (
+                    <IndicatorContainer>
+                        {menuItems.map((item) => (
+                            <IndicatorDot key={item.id} isActive={item.id === activeItem} />
+                        ))}
+                    </IndicatorContainer>
+                )}
+            </NavbarWrapper>
+        )
     );
 };
 

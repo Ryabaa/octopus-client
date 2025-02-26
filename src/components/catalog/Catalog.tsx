@@ -24,7 +24,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { Loader } from "@components/loader/Loader";
 
 import getAvailableLength from "@utils/getAvailableLength";
-import { formatPrices } from "@utils/formatPrice";
+
 import { toggleFavorite } from "@components/favorites/slice";
 
 const categories = ["all", "liquids", "vapes", "accessories", "disposable", "snus"];
@@ -100,10 +100,9 @@ const Catalog: FC = () => {
                         <ProductList>
                             {isFiltered ? (
                                 filteredProducts.map((product: any) => {
-                                    const prices = formatPrices(product.price);
                                     const [minPrice, maxPrice] = [
-                                        prices[0].value,
-                                        prices[prices.length - 1].value,
+                                        product.price[0].cost,
+                                        product.price[product.price.length - 1].cost,
                                     ];
                                     const isFavorite = favorites.includes(product.id);
                                     return (

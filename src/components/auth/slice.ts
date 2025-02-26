@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AuthStateType, AUTH, AuthFormType, AuthAccessTokenType } from "./types";
-import { setLocalStorage } from "@utils/localStorage";
+import { AuthStateType, AUTH, AuthFormType } from "./types";
+import { handleLocalAuthData } from "./helpers";
 
 const authInitialState: AuthStateType = {
     isLoading: false,
     isAuthorized: false,
+    isOpened: false,
 };
 
 export const authSlice = createSlice({
@@ -13,6 +14,7 @@ export const authSlice = createSlice({
     reducers: {
         logout: (state: AuthStateType) => {
             state.isAuthorized = false;
+            handleLocalAuthData("REMOVE");
         },
         registerUserAction: (state: AuthStateType, {}: PayloadAction<AuthFormType>) => {
             state.isLoading = true;
@@ -20,20 +22,32 @@ export const authSlice = createSlice({
         loginUserAction: (state: AuthStateType, {}: PayloadAction<AuthFormType>) => {
             state.isLoading = true;
         },
-        authUserSuccessAction: (state: AuthStateType, { payload }: PayloadAction<AuthAccessTokenType>) => {
-            const { accessToken, refreshToken } = payload;
+        authUserSuccessAction: (state: AuthStateType, { payload }: PayloadAction<any>) => {
+            const { accessToken, refreshToken, userId } = payload;
             state.isAuthorized = true;
-            setLocalStorage("refreshToken", refreshToken);
-            setLocalStorage("accessToken", accessToken);
+            handleLocalAuthData("SET", accessToken, refreshToken, userId, JSON.stringify(state.isAuthorized));
             state.isLoading = false;
         },
         authErrorAction: (state: AuthStateType) => {
             state.isLoading = false;
         },
+        setAuthOpened: (state: AuthStateType) => {
+            state.isOpened = true;
+        },
+        setAuthClosed: (state: AuthStateType) => {
+            state.isOpened = false;
+        },
     },
 });
 
-export const { logout, registerUserAction, loginUserAction, authUserSuccessAction, authErrorAction } =
-    authSlice.actions;
+export const {
+    logout,
+    registerUserAction,
+    loginUserAction,
+    authUserSuccessAction,
+    authErrorAction,
+    setAuthOpened,
+    setAuthClosed,
+} = authSlice.actions;
 
 export default authSlice.reducer;

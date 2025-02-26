@@ -12,6 +12,7 @@ export type AuthAccessTokenType = {
 export type AuthStateType = {
     isLoading: boolean;
     isAuthorized: boolean;
+    isOpened: boolean;
 };
 
 export const AUTH = "auth";

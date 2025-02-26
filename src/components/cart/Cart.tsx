@@ -17,15 +17,21 @@ import { DeleteButton, Empty, PlacingButton } from "./styles";
 import { Loader } from "@components/loader/Loader";
 import { toggleFavorite } from "@components/favorites/slice";
 
+import { getLocalStorage } from "@utils/localStorage";
+
 const Cart: FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const products = useAppSelector((state: RootState) => state.catalog.products);
     const favorites = useAppSelector((state: RootState) => state.favorites.favorites);
-    const { items, productCount, cartCount } = useAppSelector((state: RootState) => state.cart);
+    const { items, productCount, cartCount, cartPrice, insufficientProducts } = useAppSelector(
+        (state: RootState) => state.cart
+    );
 
     const [isFilteredProductsFetched, setIsFilteredProductsFetched] = useState<boolean>(false);
     const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
+
+    const isAuthorized = getLocalStorage("isAuthorized");
 
     useEffect(() => {
         const filtered = products.filter((product: any) => {
@@ -37,12 +43,14 @@ const Cart: FC = () => {
 
         setFilteredProducts(filtered);
         setIsFilteredProductsFetched(true);
+    }, [products, items]);
 
+    useEffect(() => {
         return () => {
             dispatch(setCartClosed());
             dispatch(expandCatalogNavbar());
         };
-    }, [products, items]);
+    }, []);
 
     const handleNavigateProduct = (event: MouseEvent<HTMLDivElement>) => {
         const productId = event.currentTarget.dataset.productId;
@@ -60,7 +68,9 @@ const Cart: FC = () => {
 
     const handlePlacingClick = () => {
         if (filteredProducts.length > 0) {
-            console.log(2);
+            if (!isAuthorized) {
+                navigate("/auth");
+            }
         }
     };
 
@@ -69,6 +79,15 @@ const Cart: FC = () => {
         const productId = Number(event.currentTarget.dataset.productId);
 
         dispatch(toggleFavorite(productId));
+    };
+
+    const handleGetMinCount = (productId: any) => {
+        if (insufficientProducts) {
+            const item = insufficientProducts.find((item: any) => item.productId === productId);
+            const minCount = item ? item.minCount : false;
+
+            return minCount;
+        }
     };
 
     return (
@@ -86,6 +105,7 @@ const Cart: FC = () => {
                     ) : filteredProducts.length > 0 ? (
                         filteredProducts.map((product: any) => {
                             const isFavorite = favorites.includes(product.id);
+                            const minCount = handleGetMinCount(product.id);
 
                             return (
                                 <ProductItem
@@ -101,11 +121,11 @@ const Cart: FC = () => {
                                     </ItemHead>
                                     <h3>{product.name}</h3>
                                     <ItemInfo>
-                                        <h2>
+                                        <h2 style={{ marginBottom: "20px" }}>
                                             Выбрано: <span>{productCount[product.id]} шт</span>
                                         </h2>
-                                        <p>
-                                            Сумма товара: <span>13 BYN</span>
+                                        <p style={{ color: "#c48282" }}>
+                                            {minCount ? `( Минимально: ${minCount} шт )` : "⠀"}
                                         </p>
                                     </ItemInfo>
                                     <DeleteButton data-product-id={product.id} onClick={handleDeleteProduct}>
@@ -124,7 +144,15 @@ const Cart: FC = () => {
             </CatalogContainer>
             <PlacingButton isActive={filteredProducts.length > 0} onClick={handlePlacingClick}>
                 <h3>К оформлению</h3>
-                {filteredProducts.length > 0 ? <p>{`${cartCount} шт., ${140} BYN`}</p> : <p>Нет товара</p>}
+                {filteredProducts.length > 0 ? (
+                    isAuthorized ? (
+                        <p>{`${cartCount} шт., ${cartPrice} BYN`}</p>
+                    ) : (
+                        <p>Войдите в аккаунт, чтобы оформить заказ</p>
+                    )
+                ) : (
+                    <p>Нет товара</p>
+                )}
             </PlacingButton>
         </>
     );

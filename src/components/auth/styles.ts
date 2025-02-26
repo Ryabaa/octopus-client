@@ -75,6 +75,7 @@ export const InputContainer = styled.div<{ isError?: boolean }>`
         }
         p {
             visibility: ${({ isError }) => (isError ? "visible" : "hidden")};
+            color: #b7b7b9;
             margin-top: 10px;
         }
     }

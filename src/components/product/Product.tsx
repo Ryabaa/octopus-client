@@ -24,7 +24,6 @@ import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { resetProductItems, updateProductCount } from "@components/cart/slice";
 import { collapseCatalogNavbar, expandCatalogNavbar } from "@components/catalog-navbar/slice";
 import { closeCurrentProduct, getCurrentProduct } from "@components/catalog/slice";
-import { formatPrices } from "@utils/formatPrice";
 import { toggleFavorite } from "@components/favorites/slice";
 
 type ProductProps = {
@@ -104,13 +103,13 @@ const Product: FC<ProductProps> = ({ isFromCart }) => {
                 <ItemInfoContainer>
                     <h2>{product.name}</h2>
                     <h3>
-                        Выбрано: <span>{productCount[product.id] || 0} шт.</span>
+                        Выбрано: <span>{(productCount && productCount[product.id]) || 0} шт.</span>
                     </h3>
                     <Line width={"120px"} color={"#4b4b4b"} />
                     <ItemPrice>
-                        {formatPrices(product.price).map((price, index) => (
+                        {product.price.map((price: any, index: number) => (
                             <p key={index}>
-                                От {price.key} - {price.value}р/шт.
+                                От {price.amount} - {price.cost}р/шт.
                             </p>
                         ))}
                     </ItemPrice>

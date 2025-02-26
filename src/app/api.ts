@@ -2,6 +2,7 @@ import axios from "axios";
 
 import { store } from "./store";
 import { logout } from "@components/auth/slice";
+import { getLocalStorage, setLocalStorage } from "@utils/localStorage";
 
 const API_URL = "http://localhost:3000";
 
@@ -12,8 +13,8 @@ const api = axios.create({
     },
 });
 
-let accessToken: string | null = localStorage.getItem("accessToken");
-let refreshToken: string | null = localStorage.getItem("refreshToken");
+let accessToken: string | null = getLocalStorage("accessToken");
+let refreshToken: string | null = getLocalStorage("refreshToken");
 
 api.interceptors.request.use((config) => {
     if (accessToken) {
@@ -35,11 +36,11 @@ api.interceptors.response.use(
                     refreshToken,
                 });
 
-                const newAccessToken = res.data.accessToken;
-                const newRefreshToken = res.data.refreshToken;
+                const [newAccessToken, newRefreshToken, userId] = res.data;
 
-                localStorage.setItem("accessToken", newAccessToken);
-                localStorage.setItem("refreshToken", newRefreshToken);
+                setLocalStorage("accessToken", newAccessToken);
+                setLocalStorage("refreshToken", newRefreshToken);
+                setLocalStorage("userId", userId);
 
                 accessToken = newAccessToken;
                 refreshToken = newRefreshToken;

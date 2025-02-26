@@ -4,4 +4,5 @@ export const requestUrl = {
     login: `${api}auth/login/`,
     register: `${api}auth/register/`,
     allProducts: `${api}products/all/`,
+    cart: `${api}cart/`,
 };

@@ -13,13 +13,12 @@ import {
 import { useAppDispatch, useAppSelector } from "@hooks/reduxHooks";
 import { RootState } from "@app/store";
 
-import { FaHeart, FaRegHeart } from "react-icons/fa6";
+import { FaHeart } from "react-icons/fa6";
 import { PiSmileyMeltingLight } from "react-icons/pi";
 
 import { Loader } from "@components/loader/Loader";
 
 import getAvailableLength from "@utils/getAvailableLength";
-import { formatPrices } from "@utils/formatPrice";
 
 import { collapseCatalogNavbar, expandCatalogNavbar } from "@components/catalog-navbar/slice";
 import { Empty } from "@components/cart/styles";
@@ -74,8 +73,10 @@ const Favorites: FC = () => {
                     />
                 ) : filteredProducts.length > 0 ? (
                     filteredProducts.map((product: any) => {
-                        const prices = formatPrices(product.price);
-                        const [minPrice, maxPrice] = [prices[0].value, prices[prices.length - 1].value];
+                        const [minPrice, maxPrice] = [
+                            product.price[0].cost,
+                            product.price[product.price.length - 1].cost,
+                        ];
                         return (
                             <ProductItem
                                 key={product.id}

@@ -6,9 +6,14 @@ import { AuthWrapper, Tab, Tabs, Logo, AuthContainer } from "./styles";
 
 import LogoIcon from "@assets/Logo2.svg?react";
 
+import { useAppDispatch } from "@hooks/reduxHooks";
+import { setAuthClosed, setAuthOpened } from "./slice";
+
 const Auth: FC = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const location = useLocation();
+
     const isCurrentTabLogin: boolean = location.pathname.includes("login") ? true : false;
 
     const handleNavigateLogin = () => {
@@ -37,6 +42,14 @@ const Auth: FC = () => {
             navigate("/auth/login");
         }
     }, [location, navigate]);
+
+    useEffect(() => {
+        dispatch(setAuthOpened());
+
+        return () => {
+            dispatch(setAuthClosed());
+        };
+    }, [dispatch]);
 
     return (
         <AuthWrapper {...handleSwipe}>

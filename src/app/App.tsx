@@ -25,7 +25,8 @@ const App: FC = () => {
 
     useEffect(() => {
         dispatch({ type: "FETCH_PRODUCTS_REQUEST" });
-    }, [dispatch]);
+        dispatch({ type: "FETCH_CART" });
+    }, []);
 
     return (
         <>

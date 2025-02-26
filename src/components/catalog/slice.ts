@@ -1,9 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const authInitialState: any = {
+const catalogInitialState: any = {
     products: [],
     filteredProducts: [],
-    favorites: [],
     category: "all",
     searchQuery: "",
     currentProduct: null,
@@ -11,7 +10,7 @@ const authInitialState: any = {
 
 export const catalogSlice = createSlice({
     name: "Catalog",
-    initialState: authInitialState,
+    initialState: catalogInitialState,
     reducers: {
         fetchProductsSuccess(state, action: PayloadAction<any>) {
             state.products = action.payload;

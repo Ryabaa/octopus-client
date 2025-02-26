@@ -1,12 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
 import { CartState } from "./types";
+
 import { calculateMix } from "@utils/calculateMix";
+import { getLocalStorage, setLocalStorage } from "@utils/localStorage";
 
 const initialState: CartState = {
-    items: [],
+    items: JSON.parse(getLocalStorage("cartItems") || "[]"),
+    productCount: JSON.parse(getLocalStorage("productCount") || "{}"),
+    cartCount: JSON.parse(getLocalStorage("cartCount") || "0"),
+    cartPrice: 0,
     isCartOpened: false,
-    productCount: {},
-    cartCount: 0,
+    insufficientProducts: [],
+    pendingUpdates: [],
 };
 
 const cartSlice = createSlice({
@@ -31,11 +37,20 @@ const cartSlice = createSlice({
             } else if (count > 0) {
                 state.items.push({ productId, itemId, count });
             }
+
+            const isAuthorized = getLocalStorage("isAuthorized");
+            if (!isAuthorized) {
+                setLocalStorage("cartItems", JSON.stringify(state.items));
+            }
         },
 
         updateMixCount(
             state,
-            action: PayloadAction<{ productId: string; items: any; desiredTotal: number }>
+            action: PayloadAction<{
+                productId: string;
+                items: any;
+                desiredTotal: number;
+            }>
         ) {
             const { productId, items, desiredTotal } = action.payload;
             const mix = calculateMix(items, desiredTotal);
@@ -59,6 +74,11 @@ const cartSlice = createSlice({
             state.items = state.items.filter(
                 (item) => item.productId !== productId || mix.some((mixItem) => mixItem.id === item.itemId)
             );
+
+            const isAuthorized = getLocalStorage("isAuthorized");
+            if (!isAuthorized) {
+                setLocalStorage("cartItems", JSON.stringify(state.items));
+            }
         },
 
         updateProductCount(state, action: PayloadAction<{ productId: string }>) {
@@ -71,13 +91,29 @@ const cartSlice = createSlice({
 
             state.productCount[productId] = productCount;
             state.cartCount = cartCount;
+
+            const isAuthorized = getLocalStorage("isAuthorized");
+            if (!isAuthorized) {
+                setLocalStorage("productCount", JSON.stringify(state.productCount));
+                setLocalStorage("cartCount", JSON.stringify(state.cartCount));
+            }
+
+            state.pendingUpdates = state.items;
         },
 
         resetProductItems(state, action: PayloadAction<{ productId: number }>) {
             const { productId } = action.payload;
 
             state.items = state.items.filter((item) => Number(item.productId) !== productId);
+
             delete state.productCount[String(productId)];
+
+            const isAuthorized = getLocalStorage("isAuthorized");
+            if (!isAuthorized) {
+                setLocalStorage("cartItems", JSON.stringify(state.items));
+                setLocalStorage("productCount", JSON.stringify(state.productCount));
+                setLocalStorage("cartCount", JSON.stringify(state.cartCount));
+            }
         },
 
         setCartOpened(state) {
@@ -86,8 +122,26 @@ const cartSlice = createSlice({
         setCartClosed(state) {
             state.isCartOpened = false;
         },
-        clearCart(state) {
-            state.items = [];
+
+        fetchCartSuccess(state, action: any) {
+            const { cart, cartPrice, insufficientProducts, cartCount, productCount } = action.payload;
+
+            state.pendingUpdates = state.pendingUpdates.filter((pending) =>
+                cart.some(
+                    (p: any) =>
+                        p.productId === pending.productId &&
+                        p.itemId === pending.itemId &&
+                        p.count !== pending.count
+                )
+            );
+
+            if (state.pendingUpdates.length === 0) {
+                state.items = cart;
+                state.cartPrice = cartPrice;
+                state.insufficientProducts = insufficientProducts;
+                state.cartCount = cartCount;
+                state.productCount = productCount;
+            }
         },
     },
 });
@@ -97,7 +151,7 @@ export const {
     resetProductItems,
     updateMixCount,
     updateProductCount,
-    clearCart,
+    fetchCartSuccess,
     setCartOpened,
     setCartClosed,
 } = cartSlice.actions;
