@@ -12,26 +12,23 @@ import { PiSmileyMeltingLight } from "react-icons/pi";
 import { collapseCatalogNavbar, expandCatalogNavbar } from "@components/catalog-navbar/slice";
 import { resetProductItems, setCartClosed, setCartOpened, updateProductCount } from "./slice";
 
-import { DeleteButton, Empty, PlacingButton } from "./styles";
+import { DeleteButton, Empty } from "./styles";
 
 import { Loader } from "@components/loader/Loader";
 import { toggleFavorite } from "@components/favorites/slice";
-
-import { getLocalStorage } from "@utils/localStorage";
+import OrderButton from "./OrderButton";
 
 const Cart: FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const products = useAppSelector((state: RootState) => state.catalog.products);
     const favorites = useAppSelector((state: RootState) => state.favorites.favorites);
-    const { items, productCount, cartCount, cartPrice, insufficientProducts } = useAppSelector(
-        (state: RootState) => state.cart
-    );
+    const { items, productCount, insufficientProducts } = useAppSelector((state: RootState) => state.cart);
 
     const [isFilteredProductsFetched, setIsFilteredProductsFetched] = useState<boolean>(false);
     const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
 
-    const isAuthorized = getLocalStorage("isAuthorized");
+    const hasFilteredProducts = Boolean(filteredProducts.length);
 
     useEffect(() => {
         const filtered = products.filter((product: any) => {
@@ -66,14 +63,6 @@ const Cart: FC = () => {
         }
     };
 
-    const handlePlacingClick = () => {
-        if (filteredProducts.length > 0) {
-            if (!isAuthorized) {
-                navigate("/auth");
-            }
-        }
-    };
-
     const handleToggleFavorite = (event: MouseEvent<HTMLButtonElement>) => {
         event.stopPropagation();
         const productId = Number(event.currentTarget.dataset.productId);
@@ -102,7 +91,7 @@ const Cart: FC = () => {
                             left="50%"
                             transform="translate(-50%, -50%)"
                         />
-                    ) : filteredProducts.length > 0 ? (
+                    ) : hasFilteredProducts ? (
                         filteredProducts.map((product: any) => {
                             const isFavorite = favorites.includes(product.id);
                             const minCount = handleGetMinCount(product.id);
@@ -142,18 +131,7 @@ const Cart: FC = () => {
                     )}
                 </ProductList>
             </CatalogContainer>
-            <PlacingButton isActive={filteredProducts.length > 0} onClick={handlePlacingClick}>
-                <h3>К оформлению</h3>
-                {filteredProducts.length > 0 ? (
-                    isAuthorized ? (
-                        <p>{`${cartCount} шт., ${cartPrice} BYN`}</p>
-                    ) : (
-                        <p>Войдите в аккаунт, чтобы оформить заказ</p>
-                    )
-                ) : (
-                    <p>Нет товара</p>
-                )}
-            </PlacingButton>
+            <OrderButton hasFilteredProducts={hasFilteredProducts} />
         </>
     );
 };

@@ -1,6 +1,12 @@
 import { getLocalStorage, removeLocalStorage, setLocalStorage } from "@utils/localStorage";
 
-type AuthAction = "REMOVE" | "SET" | "GET";
+const AUTH_ACTIONS = {
+    REMOVE: "REMOVE",
+    SET: "SET",
+    GET: "GET",
+} as const;
+
+type AuthAction = (typeof AUTH_ACTIONS)[keyof typeof AUTH_ACTIONS];
 
 export const handleLocalAuthData = (
     action: AuthAction,
@@ -17,13 +23,13 @@ export const handleLocalAuthData = (
     ];
 
     switch (action) {
-        case "SET":
+        case AUTH_ACTIONS.SET:
             localAuthData.forEach(({ key, value }) => setLocalStorage(key, value!));
             break;
-        case "REMOVE":
+        case AUTH_ACTIONS.REMOVE:
             localAuthData.forEach(({ key }) => removeLocalStorage(key));
             break;
-        case "GET":
+        case AUTH_ACTIONS.GET:
             return localAuthData.reduce((acc, { key }) => {
                 acc[key] = getLocalStorage(key);
                 return acc;
